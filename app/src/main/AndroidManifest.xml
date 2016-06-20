@@ -14,8 +14,6 @@
         </activity>
         <activity
             android:name=".LoungeActivity"
-            android:label="@string/title_activity_lounge"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

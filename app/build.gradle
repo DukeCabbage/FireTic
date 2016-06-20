@@ -12,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,12 +29,30 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
     compile 'com.android.support:cardview-v7:24.0.0'
+
+    // Dagger 2 and Compiler
+    compile "com.google.dagger:dagger:2.4"
+    apt "com.google.dagger:dagger-compiler:2.4"
+    // Needed for @Generated annotation (missing in Java <= 1.6; therefore, Android)
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    // ReactiveX
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+
+    // Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    compile 'com.google.firebase:firebase-core:9.0.2'
+    compile 'com.google.firebase:firebase-database:9.0.2'
 
     compile 'com.jakewharton:butterknife:8.1.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile 'com.jakewharton.timber:timber:4.1.2'
     compile 'com.facebook.stetho:stetho:1.3.1'
 }
+
+//apply plugin: 'com.google.gms.google-services'
