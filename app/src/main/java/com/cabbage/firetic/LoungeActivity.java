@@ -28,7 +28,7 @@ public class LoungeActivity extends AppCompatActivity {
     @OnClick(R.id.btn_connect)
     void connectOnClick(View view) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReferenceFromUrl("https://project-nephele.firebaseio.com/");
+        DatabaseReference myRef = database.getReference("message");
 
         myRef.setValue("Hello, World!");
     }

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1091763848366",
+    "firebase_url": "https://project-nephele.firebaseio.com",
+    "project_id": "project-nephele",
+    "storage_bucket": "project-nephele.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091763848366:android:96c1d755106e3b3c",
+        "android_client_info": {
+          "package_name": "com.cabbage.firetic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091763848366-st1ms4dtm5hsgvl0clv8ckujed8e8u0i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cabbage.firetic",
+            "certificate_hash": "4482C2CE081A743C3F1DD8B4B6CEC9183C9273F1"
+          }
+        },
+        {
+          "client_id": "1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMDQvrPiu02F71R_S-9g6rmdX27VDeUFg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
