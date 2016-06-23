@@ -7,12 +7,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.cabbage.firetic.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class LoungeActivity extends AppCompatActivity {
 
@@ -27,10 +33,30 @@ public class LoungeActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
     @OnClick(R.id.btn_connect)
     void connectOnClick(View view) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        // TODO: Need play services 9.0.x to test, not available on emulators now
+//        FirebaseCrash.log("Connect on click");
 
-        myRef.setValue("Hello, World!");
+        final String inputUserName = etUsername.getText().toString();
+
+        final DatabaseReference usersRef = ((MyApplication)getApplication()).usersRef();
+        if (usersRef != null) {
+            Query existingUserQuery = usersRef.orderByChild("userName").equalTo(inputUserName);
+            existingUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Timber.d("child exists: " + (dataSnapshot.exists()));
+                    if (!dataSnapshot.exists()) {
+                        usersRef.push().setValue(new User(inputUserName));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
     //endregion
 
