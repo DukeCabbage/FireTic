@@ -3,6 +3,7 @@ package com.cabbage.firetic;
 import android.app.Application;
 import android.support.annotation.Nullable;
 
+import com.cabbage.firetic.model.User;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -11,8 +12,9 @@ import timber.log.Timber;
 
 public class MyApplication extends Application {
 
-    FirebaseDatabase database;
-    MyApplication mInstance;
+    private FirebaseDatabase database;
+    private MyApplication mInstance;
+    private User currentUser;
 
     @Override
     public void onCreate() {
@@ -27,6 +29,10 @@ public class MyApplication extends Application {
             e.printStackTrace();
             database = null;
         }
+    }
+
+    public MyApplication getInstance() {
+        return mInstance;
     }
 
     @Nullable
