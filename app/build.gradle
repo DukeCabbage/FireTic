@@ -53,6 +53,7 @@ dependencies {
 
     compile "com.google.firebase:firebase-core:${FIREBASE_VERSION}"
     compile "com.google.firebase:firebase-database:${FIREBASE_VERSION}"
+    compile "com.google.firebase:firebase-messaging:${FIREBASE_VERSION}"
 //    compile "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
 
     compile 'com.jakewharton:butterknife:8.1.0'
