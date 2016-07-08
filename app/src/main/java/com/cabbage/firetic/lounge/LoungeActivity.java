@@ -45,7 +45,7 @@ public class LoungeActivity extends AppCompatActivity {
             return;
         }
 
-        final DatabaseReference usersRef = ((MyApplication)getApplication()).usersRef();
+        final DatabaseReference usersRef = MyApplication.dataComponent().getUsersRef();
         if (usersRef != null) {
             Query existingUserQuery = usersRef.orderByChild("userName").equalTo(inputUserName);
             existingUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -17,15 +17,12 @@
         <activity
             android:name=".lounge.LoungeActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
-        </activity>
-        <activity
-            android:name=".NotifActivity"
-            android:label="@string/title_activity_notif"
-            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".NotifActivity">
         </activity>
 
         <service

@@ -1,52 +1,75 @@
 package com.cabbage.firetic;
 
 import android.app.Application;
-import android.support.annotation.Nullable;
 
-import com.cabbage.firetic.model.User;
+import com.cabbage.firetic.dagger.AppComponent;
+import com.cabbage.firetic.dagger.AppModule;
+import com.cabbage.firetic.dagger.DaggerAppComponent;
+import com.cabbage.firetic.dagger.DaggerDataComponent;
+import com.cabbage.firetic.dagger.DataComponent;
+import com.cabbage.firetic.dagger.FirebaseModule;
 import com.facebook.stetho.Stetho;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 
 public class MyApplication extends Application {
 
-    private FirebaseDatabase database;
-    private MyApplication mInstance;
-    private User currentUser;
+    private static MyApplication mInstance;
+    private static AppComponent mComponent;
+    private static DataComponent mDataComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+            Stetho.initializeWithDefaults(this);
+        }
 
-        Timber.plant(new Timber.DebugTree());
-        Stetho.initializeWithDefaults(this);
+        initAppComponent();
+        initDataComponent();
+    }
+
+    private void initAppComponent() {
+        Timber.i("Initializing app component...");
         try {
-            database = FirebaseDatabase.getInstance();
+            AppModule appModule = new AppModule(mInstance);
+            mComponent = DaggerAppComponent.builder()
+                    .appModule(appModule)
+                    .build();
         } catch (Exception e) {
+            Timber.e(e.getLocalizedMessage());
             e.printStackTrace();
-            database = null;
+            mComponent = null;
         }
     }
 
-    public MyApplication getInstance() {
+    private void initDataComponent() {
+        Timber.i("Initializing data component...");
+        try {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            FirebaseModule firebaseModule = new FirebaseModule(database);
+            mDataComponent = DaggerDataComponent.builder()
+                    .firebaseModule(firebaseModule)
+                    .build();
+        } catch (Exception e) {
+            Timber.e(e.getLocalizedMessage());
+            e.printStackTrace();
+            mDataComponent = null;
+        }
+    }
+
+    public static MyApplication getInstance() {
         return mInstance;
     }
 
-    @Nullable
-    public FirebaseDatabase firebaseDatabase() {
-        return database;
+    public static AppComponent component() {
+        return mComponent;
     }
 
-    @Nullable
-    public DatabaseReference usersRef() {
-        return database == null ? null : database.getReference("users");
-    }
-
-    @Nullable
-    public DatabaseReference gamesRef() {
-        return database == null ? null : database.getReference("games");
+    public static DataComponent dataComponent() {
+        return mDataComponent;
     }
 }
