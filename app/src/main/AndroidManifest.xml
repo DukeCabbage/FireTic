@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.cabbage.firetic"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.cabbage.firetic">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -12,18 +12,42 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GameboardActivity">
+
+        <!-- Activities -->
+        <activity
+            android:name=".GameboardActivity"
+            android:label="Gameboard"
+            android:parentActivityName=".lounge.LoungeActivity"
+            android:screenOrientation="portrait">
+            <!--<intent-filter>-->
+                <!--<action android:name="OPEN_ACTIVITY_GAMEBOARD"/>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+            <!--</intent-filter>-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".lounge.LoungeActivity" />-->
         </activity>
         <activity
             android:name=".lounge.LoungeActivity"
+            android:label="Lounge"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize">
+            <!--<intent-filter>-->
+                <!--<action android:name="OPEN_ACTIVITY_LOUNGE"/>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity android:name=".NotifActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".NotifActivity">
-        </activity>
+
+
+        <!-- Services -->
 
         <service
             android:name=".fcm.MyFirebaseMessagingService">
