@@ -29,6 +29,7 @@ public class LoungeActivity extends AppCompatActivity {
     //region Outlets
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.et_username) EditText etUsername;
+    @BindView(R.id.et_password) EditText etPassword;
     @BindView(R.id.et_game_id) EditText etGameId;
     @BindView(R.id.btn_connect) Button btnConnect;
     //endregion
@@ -41,11 +42,12 @@ public class LoungeActivity extends AppCompatActivity {
 //        FirebaseCrash.log("Connect on click");
 
         final String inputUserName = etUsername.getText().toString();
-        if (TextUtils.isEmpty(inputUserName)) {
+        final String inputPassword = etPassword.getText().toString();
+        if (TextUtils.isEmpty(inputUserName) || TextUtils.isEmpty(inputPassword)) {
             return;
         }
 
-        final DatabaseReference usersRef = MyApplication.dataComponent().getUsersRef();
+        final DatabaseReference usersRef = MyApplication.component().getUsersRef();
         if (usersRef != null) {
             Query existingUserQuery = usersRef.orderByChild("userName").equalTo(inputUserName);
             existingUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -54,7 +56,7 @@ public class LoungeActivity extends AppCompatActivity {
                     Timber.d("Child exists: %b", dataSnapshot.exists());
                     if (!dataSnapshot.exists()) {
                         DatabaseReference newUserRef = usersRef.push();
-                        User newUser = new User(newUserRef.getKey(), inputUserName);
+                        User newUser = new User(newUserRef.getKey(), inputUserName, inputPassword);
                         Timber.d("Creating new user:");
                         Timber.d(newUser.toString());
                         newUserRef.setValue(newUser);
@@ -73,7 +75,6 @@ public class LoungeActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
     //endregion
 

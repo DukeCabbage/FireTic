@@ -19,26 +19,12 @@
             android:label="Gameboard"
             android:parentActivityName=".lounge.LoungeActivity"
             android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-                <!--<action android:name="OPEN_ACTIVITY_GAMEBOARD"/>-->
-                <!--<category android:name="android.intent.category.DEFAULT"/>-->
-            <!--</intent-filter>-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".lounge.LoungeActivity" />-->
         </activity>
         <activity
             android:name=".lounge.LoungeActivity"
             android:label="Lounge"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize">
-            <!--<intent-filter>-->
-                <!--<action android:name="OPEN_ACTIVITY_LOUNGE"/>-->
-                <!--<category android:name="android.intent.category.DEFAULT"/>-->
-            <!--</intent-filter>-->
-        </activity>
-
-        <activity android:name=".NotifActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -46,7 +32,7 @@
             </intent-filter>
         </activity>
 
-
+        <activity android:name=".NotifActivity"></activity>
         <!-- Services -->
 
         <service
