@@ -1,6 +1,7 @@
 package com.cabbage.firetic.dagger;
 
 import com.cabbage.firetic.model.User;
+import com.facebook.stetho.common.ArrayListAccumulator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -14,7 +15,10 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -37,9 +41,20 @@ public class NetworkModule {
         JsonDeserializer<List<User>> deserializer = new JsonDeserializer<List<User>>() {
             @Override
             public List<User> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                List<User> results = new ArrayList<>();
+
                 JsonObject object = json.getAsJsonObject();
-                object.entrySet();
-                return new ArrayList<>();
+                Set<Map.Entry<String, JsonElement>> set = object.entrySet();
+                for (Map.Entry<String, JsonElement> item : set) {
+                    String userId = item.getKey();
+                    JsonObject userObj = item.getValue().getAsJsonObject();
+
+                    Gson gson = new Gson();
+                    User user = gson.fromJson(userObj, User.class);
+                    user.setUserId(userId);
+                    results.add(user);
+                }
+                return results;
             }
         };
 

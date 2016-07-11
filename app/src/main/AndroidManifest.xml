@@ -24,16 +24,20 @@
             android:name=".lounge.LoungeActivity"
             android:label="Lounge"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
-
-        </activity>
-
-        <activity android:name=".NotifActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".NotifActivity"
+            android:screenOrientation="portrait">
+
         </activity>
         <!-- Services -->
 

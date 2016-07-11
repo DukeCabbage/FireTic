@@ -1,5 +1,7 @@
 package com.cabbage.firetic.model;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class User {
         matchIdList.add("second game");
     }
 
+    @Exclude
     public String getUserId() {
         return userId;
     }

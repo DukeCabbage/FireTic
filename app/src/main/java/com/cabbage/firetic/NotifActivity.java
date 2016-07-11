@@ -9,9 +9,6 @@ import android.widget.TextView;
 
 import com.cabbage.firetic.model.User;
 import com.cabbage.firetic.network.NepheleService;
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
