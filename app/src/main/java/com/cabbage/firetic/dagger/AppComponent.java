@@ -9,6 +9,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import retrofit2.Retrofit;
 
 @Singleton
 @Component(modules = {
@@ -18,11 +19,16 @@ import dagger.Component;
 })
 public interface AppComponent {
 
-    @Named("application") Context appContext();
+    @Named("application")
+    Context appContext();
 
     FirebaseDatabase fireDB();
-    @Named("user") DatabaseReference getUsersRef();
-    @Named("game") DatabaseReference getGamesRef();
 
+    @Named("user")
+    DatabaseReference getUsersRef();
 
+    @Named("game")
+    DatabaseReference getGamesRef();
+
+    Retrofit getRetrofit();
 }

@@ -1,7 +1,6 @@
 package com.cabbage.firetic.lounge;
 
 import android.os.Bundle;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 
 import com.cabbage.firetic.MyApplication;
 import com.cabbage.firetic.R;
-import com.cabbage.firetic.model.Game;
 import com.cabbage.firetic.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

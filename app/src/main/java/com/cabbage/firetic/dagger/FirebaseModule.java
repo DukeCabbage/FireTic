@@ -24,13 +24,15 @@ public class FirebaseModule {
         return firebaseDatabase;
     }
 
-    @Provides @Named("user")
+    @Provides
+    @Named("user")
     @Singleton
     DatabaseReference providesUserRef(FirebaseDatabase db) {
         return db.getReference("users");
     }
 
-    @Provides @Named("game")
+    @Provides
+    @Named("game")
     @Singleton
     DatabaseReference providesGameRef(FirebaseDatabase db) {
         return db.getReference("games");

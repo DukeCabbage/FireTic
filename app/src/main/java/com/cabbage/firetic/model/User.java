@@ -11,7 +11,8 @@ public class User {
     private String password;
     private List<String> matchIdList;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String userId, String userName, String password) {
         this.userId = userId;
@@ -22,21 +23,37 @@ public class User {
         matchIdList.add("second game");
     }
 
-    public String getUserId() { return userId; }
+    public String getUserId() {
+        return userId;
+    }
 
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-    public String getUserName() { return userName; }
+    public String getUserName() {
+        return userName;
+    }
 
-    public void setUserName(String userName) { this.userName = userName; }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public List<String> getMatchIdList() { return matchIdList; }
+    public List<String> getMatchIdList() {
+        return matchIdList;
+    }
 
-    public void setMatchIdList(List<String> matchIdList) { this.matchIdList = matchIdList; }
+    public void setMatchIdList(List<String> matchIdList) {
+        this.matchIdList = matchIdList;
+    }
 
     public void addMatchId(String matchId) {
         if (matchIdList.indexOf(matchId) == -1) {

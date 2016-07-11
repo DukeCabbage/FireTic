@@ -16,9 +16,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import timber.log.Timber;
 
-/**
- * Created by Leo on 7/6/2016.
- */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
