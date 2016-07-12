@@ -17,8 +17,8 @@ android {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('C:/KeyStore/debug.keystore')
-//            storeFile file('/Users/Leo/Documents/debug.keystore')
+//            storeFile file('C:/KeyStore/debug.keystore')
+            storeFile file('/Users/Leo/Documents/debug.keystore')
             storePassword 'android'
         }
     }

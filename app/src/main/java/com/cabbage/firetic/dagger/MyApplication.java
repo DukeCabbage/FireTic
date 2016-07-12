@@ -1,11 +1,8 @@
-package com.cabbage.firetic;
+package com.cabbage.firetic.dagger;
 
 import android.app.Application;
 
-import com.cabbage.firetic.dagger.AppComponent;
-import com.cabbage.firetic.dagger.AppModule;
-import com.cabbage.firetic.dagger.DaggerAppComponent;
-import com.cabbage.firetic.dagger.FirebaseModule;
+import com.cabbage.firetic.BuildConfig;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.database.FirebaseDatabase;
 

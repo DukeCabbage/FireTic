@@ -1,4 +1,4 @@
-package com.cabbage.firetic;
+package com.cabbage.firetic.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cabbage.firetic.dagger.MyApplication;
+import com.cabbage.firetic.R;
 import com.cabbage.firetic.model.User;
 import com.cabbage.firetic.network.NepheleService;
 

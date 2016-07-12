@@ -1,4 +1,4 @@
-package com.cabbage.firetic;
+package com.cabbage.firetic.ui;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
+
+import com.cabbage.firetic.R;
 
 import butterknife.BindColor;
 import butterknife.BindView;

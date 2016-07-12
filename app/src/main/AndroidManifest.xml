@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".MyApplication"
+        android:name=".dagger.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,13 +15,21 @@
 
         <!-- Activities -->
         <activity
-            android:name=".GameboardActivity"
+            android:name=".ui.GameboardActivity"
             android:label="Gameboard"
-            android:parentActivityName=".lounge.LoungeActivity"
+            android:parentActivityName=".ui.LoungeActivity"
             android:screenOrientation="portrait">
         </activity>
+
         <activity
-            android:name=".lounge.LoungeActivity"
+            android:name=".ui.gameboard.GameboardActivity2"
+            android:label="Gameboard"
+            android:parentActivityName=".ui.LoungeActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".ui.LoungeActivity"
             android:label="Lounge"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -35,7 +43,7 @@
         </activity>
 
         <activity
-            android:name=".NotifActivity"
+            android:name=".ui.NotifActivity"
             android:screenOrientation="portrait">
 
         </activity>

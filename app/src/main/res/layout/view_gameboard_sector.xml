@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameboard_sector"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/divider"
+    android:stretchColumns="0,1,2"
+    tools:layout_height="320dp"
+    tools:layout_width="320dp"
+    tools:layout_gravity="center">
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+        <View
+            style="@style/board_unit"
+            android:background="@color/white_smoke"/>
+
+
+    </TableRow>
+
+</TableLayout>
