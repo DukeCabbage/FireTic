@@ -11,6 +11,7 @@ import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.model.User;
 import com.cabbage.firetic.network.NepheleService;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
 
@@ -31,30 +32,30 @@ public class NotifActivity extends AppCompatActivity {
     Retrofit fireRetro;
 
     @SuppressWarnings("unused")
-    @OnClick(R.id.fab)
+    @OnClick(R.id.btn_get_token)
     void onClick(View view) {
-//        String token = FirebaseInstanceId.getInstance().getToken();
-//        Timber.d("FCM token: " + token);
-
-        NepheleService service = fireRetro.create(NepheleService.class);
-        service.getUsers().subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<User>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<User> users) {
-                        Timber.d("User count: " + users.size());
-                    }
-                });
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Timber.d("FCM token: " + token);
+        tvSimple.setText(token);
+//        NepheleService service = fireRetro.create(NepheleService.class);
+//        service.getUsers().subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<List<User>>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    @Override
+//                    public void onNext(List<User> users) {
+//                        Timber.d("User count: " + users.size());
+//                    }
+//                });
     }
 
     @Override

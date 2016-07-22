@@ -26,14 +26,6 @@
             android:label="Gameboard"
             android:parentActivityName=".ui.LoungeActivity"
             android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".ui.LoungeActivity"
-            android:label="Lounge"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -43,9 +35,17 @@
         </activity>
 
         <activity
+            android:name=".ui.LoungeActivity"
+            android:label="Lounge"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+        </activity>
+
+        <activity
             android:name=".ui.NotifActivity"
             android:screenOrientation="portrait">
-
         </activity>
         <!-- Services -->
 

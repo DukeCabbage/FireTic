@@ -13,10 +13,21 @@
     tools:context=".ui.NotifActivity"
     tools:showIn="@layout/activity_notif">
 
-    <TextView
-        android:id="@+id/tv_simple"
+    <Button
+        android:id="@+id/btn_get_token"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:text="Retrieve token"
+        android:backgroundTint="@color/accent"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/tv_simple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_get_token"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
 
 </RelativeLayout>
