@@ -16,34 +16,21 @@
         android:layout_weight="1">
 
         <View
+            android:id="@+id/btn_1"
             style="@style/board_unit"
+            android:tag="1"
             android:background="@color/white_smoke"/>
 
         <View
+            android:id="@+id/btn_2"
             style="@style/board_unit"
+            android:tag="2"
             android:background="@color/white_smoke"/>
 
         <View
+            android:id="@+id/btn_3"
             style="@style/board_unit"
-            android:background="@color/white_smoke"/>
-
-    </TableRow>
-
-    <TableRow
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-
-        <View
-            style="@style/board_unit"
-            android:background="@color/white_smoke"/>
-
-        <View
-            style="@style/board_unit"
-            android:background="@color/white_smoke"/>
-
-        <View
-            style="@style/board_unit"
+            android:tag="3"
             android:background="@color/white_smoke"/>
 
     </TableRow>
@@ -53,15 +40,45 @@
         android:layout_weight="1">
 
         <View
+            android:id="@+id/btn_4"
             style="@style/board_unit"
+            android:tag="4"
             android:background="@color/white_smoke"/>
 
         <View
+            android:id="@+id/btn_5"
             style="@style/board_unit"
+            android:tag="5"
             android:background="@color/white_smoke"/>
 
         <View
+            android:id="@+id/btn_6"
             style="@style/board_unit"
+            android:tag="6"
+            android:background="@color/white_smoke"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <View
+            android:id="@+id/btn_7"
+            style="@style/board_unit"
+            android:tag="7"
+            android:background="@color/white_smoke"/>
+
+        <View
+            android:id="@+id/btn_8"
+            style="@style/board_unit"
+            android:tag="8"
+            android:background="@color/white_smoke"/>
+
+        <View
+            android:id="@+id/btn_9"
+            style="@style/board_unit"
+            android:tag="9"
             android:background="@color/white_smoke"/>
 
 
