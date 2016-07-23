@@ -16,24 +16,23 @@
         android:background="@color/primary_light"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <View
+        <com.cabbage.firetic.ui.gameboard.TestZoomObject
             android:id="@+id/view_zoom_test"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="@color/white_smoke"
             android:clickable="true"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:visibility="visible"/>
 
         <!--<android.support.v7.widget.CardView-->
-            <!--android:id="@+id/gameboard"-->
+            <!--android:id="@+id/gameboardCard"-->
             <!--android:layout_width="320dp"-->
             <!--android:layout_height="320dp"-->
             <!--android:layout_centerInParent="true"-->
             <!--app:cardCornerRadius="0dp">-->
 
-            <!--<com.cabbage.firetic.ui.gameboard.GameboardSector-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"/>-->
+            <!--<include layout="@layout/view_gameboard_sector"/>-->
 
         <!--</android.support.v7.widget.CardView>-->
 

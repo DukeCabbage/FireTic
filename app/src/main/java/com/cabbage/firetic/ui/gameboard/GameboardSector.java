@@ -10,12 +10,10 @@ import com.cabbage.firetic.R;
 public class GameboardSector extends TableLayout {
     public GameboardSector(Context context) {
         super(context);
-        initializeViews(context);
     }
 
     public GameboardSector(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initializeViews(context);
     }
 
     private void initializeViews(Context context) {
