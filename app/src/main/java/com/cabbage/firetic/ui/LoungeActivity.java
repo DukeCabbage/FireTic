@@ -13,7 +13,7 @@ import android.widget.EditText;
 import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.model.User;
-import com.cabbage.firetic.ui.gameboard.GameboardActivity2;
+import com.cabbage.firetic.ui.gameboard.GameboardActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -96,7 +96,7 @@ public class LoungeActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
     @OnClick(R.id.fab)
     void fabOnClick(View v) {
-        Intent intent = new Intent(this, GameboardActivity2.class);
+        Intent intent = new Intent(this, GameboardActivity.class);
         startActivity(intent);
     }
     //endregion

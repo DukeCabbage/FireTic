@@ -19,38 +19,31 @@ import java.lang.ref.WeakReference;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Optional;
 
-public class GameboardActivity2 extends AppCompatActivity {
+public class GameboardActivity extends AppCompatActivity {
 
     //region Outlets
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @Nullable @BindView(R.id.view_zoom_test) View testView;
-    @Nullable @BindView(R.id.gameboard_ard) View gameboardCard;
+    @BindView(R.id.gameboard_sector) GameboardSector sector;
     //endregion
 
     @SuppressWarnings("unused")
-    @Optional @OnClick(R.id.view_zoom_test)
-    void testZoom(final View view) {
-        float currentScale = view.getScaleX();
+    @OnClick(R.id.gameboard_sector)
+    void boardOnClick(View view) {
+//        zoomBoard((GameboardSector) view.getParent(), true);
+        zoomBoard(view, true);
+    }
 
-        final ViewPropertyAnimator animator = view.animate();
-        if (currentScale < 3.0) {
-            animator.scaleX(currentScale + 1).scaleY(currentScale + 1);
-        } else {
-            animator.scaleX(1).scaleY(1);
-        }
-
-        animator.setDuration(333L)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setListener(new MyAnimatorListener(new WeakReference<>(testView)))
-                .start();
+    @SuppressWarnings("unused")
+    @OnClick({R.id.dismiss_area_left, R.id.dismiss_area_right, R.id.dismiss_area_top, R.id.dismiss_area_bottom})
+    void dismiss() {
+        zoomBoard(sector, false);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gameboard_2);
+        setContentView(R.layout.activity_gameboard);
         ButterKnife.bind(this);
         setUpAppBar();
     }
@@ -77,40 +70,41 @@ public class GameboardActivity2 extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.zoom_in:
-                zoomBoard(true);
-                ((GameboardSector) gameboardCard.findViewById(R.id.gameboard_sector)).enableGridClick(true);
+                zoomBoard(sector, true);
                 return true;
             case R.id.zoom_out:
-                zoomBoard(false);
-                ((GameboardSector) gameboardCard.findViewById(R.id.gameboard_sector)).enableGridClick(false);
+                zoomBoard(sector, false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void zoomBoard(boolean isEnlarging) {
-        if (gameboardCard == null)
+    private void zoomBoard(View boardView, boolean isEnlarging) {
+        if (boardView == null)
             return;
 
-        float currentScale = gameboardCard.getScaleX();
-        final ViewPropertyAnimator animator = gameboardCard.animate();
-        int width = gameboardCard.getWidth();
-        int height = gameboardCard.getHeight();
-        gameboardCard.setPivotX(width/2);
-        gameboardCard.setPivotY(height/2);
+        float currentScale = boardView.getScaleX();
+        final ViewPropertyAnimator animator = boardView.animate();
+        int width = boardView.getWidth();
+        int height = boardView.getHeight();
+        boardView.setPivotX(width/2);
+        boardView.setPivotY(height/2);
         if (currentScale == 1 && isEnlarging) {
             float scaleTo = 2;
             animator.scaleX(scaleTo).scaleY(scaleTo);
+
         } else if (!isEnlarging) {
             animator.scaleX(1).scaleY(1);
+
         } else {
             return;
         }
+        ((GameboardSector)boardView).enableGridClick(isEnlarging);
 
         animator.setDuration(333L)
                 .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setListener(new MyAnimatorListener(new WeakReference<>(testView)))
+                .setListener(new MyAnimatorListener(new WeakReference<>(boardView)))
                 .start();
     }
 }

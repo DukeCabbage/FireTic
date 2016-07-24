@@ -15,14 +15,7 @@
 
         <!-- Activities -->
         <activity
-            android:name=".ui.GameboardActivity"
-            android:label="Gameboard"
-            android:parentActivityName=".ui.LoungeActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".ui.gameboard.GameboardActivity2"
+            android:name=".ui.gameboard.GameboardActivity"
             android:label="Gameboard"
             android:parentActivityName=".ui.LoungeActivity"
             android:screenOrientation="portrait">

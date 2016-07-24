@@ -9,8 +9,8 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.cabbage.firetic.ui.GameboardActivity;
 import com.cabbage.firetic.R;
+import com.cabbage.firetic.ui.gameboard.GameboardActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
