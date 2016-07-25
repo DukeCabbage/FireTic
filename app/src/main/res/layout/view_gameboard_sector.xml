@@ -7,88 +7,90 @@
     android:layout_height="160dp"
     android:background="@color/divider"
     android:clickable="true"
-    android:stretchColumns="0,1,2"
     android:layout_centerInParent="true"
     tools:layout_height="320dp"
     tools:layout_width="320dp"
     tools:layout_gravity="center">
 
-    <TableRow
-        android:layout_height="0dp"
-        android:layout_weight="1">
+    <TableLayout
+        android:id="@+id/gameboard_table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/divider"
+        android:showDividers="beginning"
+        android:stretchColumns="0,1,2">
 
-        <View
-            android:id="@+id/btn_0"
-            style="@style/board_unit"
-            android:tag="0"
-            android:background="@color/white_smoke"/>
+        <TableRow
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <View
-            android:id="@+id/btn_1"
-            style="@style/board_unit"
-            android:tag="1"
-            android:background="@color/white_smoke"/>
+            <View
+                android:id="@+id/btn_0"
+                style="@style/board_unit"
+                android:tag="0"
+                android:background="@color/white_smoke"/>
 
-        <View
-            android:id="@+id/btn_2"
-            style="@style/board_unit"
-            android:tag="2"
-            android:background="@color/white_smoke"/>
+            <View
+                android:id="@+id/btn_1"
+                style="@style/board_unit"
+                android:tag="1"
+                android:background="@color/white_smoke"/>
 
-    </TableRow>
+            <View
+                android:id="@+id/btn_2"
+                style="@style/board_unit"
+                android:tag="2"
+                android:background="@color/white_smoke"/>
 
-    <TableRow
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        </TableRow>
 
-        <View
-            android:id="@+id/btn_3"
-            style="@style/board_unit"
-            android:tag="3"
-            android:background="@color/white_smoke"/>
+        <TableRow
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <View
-            android:id="@+id/btn_4"
-            style="@style/board_unit"
-            android:tag="4"
-            android:background="@color/white_smoke"/>
+            <View
+                android:id="@+id/btn_3"
+                style="@style/board_unit"
+                android:tag="3"
+                android:background="@color/white_smoke"/>
 
-        <View
-            android:id="@+id/btn_5"
-            style="@style/board_unit"
-            android:tag="5"
-            android:background="@color/white_smoke"/>
+            <View
+                android:id="@+id/btn_4"
+                style="@style/board_unit"
+                android:tag="4"
+                android:background="@color/white_smoke"/>
 
-    </TableRow>
+            <View
+                android:id="@+id/btn_5"
+                style="@style/board_unit"
+                android:tag="5"
+                android:background="@color/white_smoke"/>
 
-    <TableRow
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        </TableRow>
 
-        <View
-            android:id="@+id/btn_6"
-            style="@style/board_unit"
-            android:tag="6"
-            android:background="@color/white_smoke"/>
+        <TableRow
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <View
-            android:id="@+id/btn_7"
-            style="@style/board_unit"
-            android:tag="7"
-            android:background="@color/white_smoke"/>
+            <View
+                android:id="@+id/btn_6"
+                style="@style/board_unit"
+                android:tag="6"
+                android:background="@color/white_smoke"/>
 
-        <View
-            android:id="@+id/btn_8"
-            style="@style/board_unit"
-            android:tag="8"
-            android:background="@color/white_smoke"/>
-    </TableRow>
+            <View
+                android:id="@+id/btn_7"
+                style="@style/board_unit"
+                android:tag="7"
+                android:background="@color/white_smoke"/>
 
-    <!--<View-->
-        <!--android:id="@+id/touch_interceptor"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:clickable="true"-->
-        <!--android:background="@android:color/transparent"/>-->
+            <View
+                android:id="@+id/btn_8"
+                style="@style/board_unit"
+                android:tag="8"
+                android:background="@color/white_smoke"/>
+        </TableRow>
+
+    </TableLayout>
 
 </com.cabbage.firetic.ui.gameboard.GameboardSector>
