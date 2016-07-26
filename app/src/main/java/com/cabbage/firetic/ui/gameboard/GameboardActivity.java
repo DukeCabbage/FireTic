@@ -7,9 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import com.cabbage.firetic.R;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,12 +18,12 @@ import butterknife.OnClick;
 public class GameboardActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.gameboard_sector) GameboardSector sector;
+    @BindView(R.id.gameboard) RelativeLayout mGameboard;
 
     @SuppressWarnings("unused")
     @OnClick({R.id.dismiss_area_left, R.id.dismiss_area_right, R.id.dismiss_area_top, R.id.dismiss_area_bottom})
     void dismiss() {
-        sector.focusOnSector(false);
+//        sector.focusOnSector(false);
     }
 
     @Override
@@ -56,10 +56,10 @@ public class GameboardActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.zoom_in:
-                sector.focusOnSector(true);
+//                sector.focusOnSector(true);
                 return true;
             case R.id.zoom_out:
-                sector.focusOnSector(false);
+//                sector.focusOnSector(false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

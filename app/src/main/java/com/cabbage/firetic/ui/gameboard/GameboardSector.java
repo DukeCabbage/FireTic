@@ -16,16 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindColor;
+import butterknife.BindDimen;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class GameboardSector extends CardView implements View.OnClickListener {
+public class GameboardSector extends CardView {
 
     public final int TOTAL_GRID_NUMBER = 9;
     @BindColor(R.color.primary) int colorPrimary;
     @BindColor(R.color.player1) int colorPlayer1;
     @BindColor(R.color.player2) int colorPlayer2;
+    @BindDimen(R.dimen.sector_default_elevation) float defaultElevation;
+
     @BindViews({R.id.btn_0, R.id.btn_1, R.id.btn_2,
             R.id.btn_3, R.id.btn_4, R.id.btn_5,
             R.id.btn_6, R.id.btn_7, R.id.btn_8})
@@ -62,7 +65,6 @@ public class GameboardSector extends CardView implements View.OnClickListener {
         super.onFinishInflate();
         ButterKnife.bind(this, this);
         enableGridClick(false);
-        setOnClickListener(this);
     }
 
 //    int[] getGridOwnership() {
@@ -124,13 +126,7 @@ public class GameboardSector extends CardView implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        Timber.w("Clicked");
-        focusOnSector(true);
-    }
-
-    public void focusOnSector(boolean isEnlarging) {
+    void focusOnSector(boolean isEnlarging) {
         if (zoomedIn == isEnlarging) {
             return;
         }
@@ -144,10 +140,10 @@ public class GameboardSector extends CardView implements View.OnClickListener {
         if (currentScale == 1 && isEnlarging) {
             float scaleTo = 2;
             animator.scaleX(scaleTo).scaleY(scaleTo);
-
+            setElevation(2f * defaultElevation);
         } else if (!isEnlarging) {
             animator.scaleX(1).scaleY(1);
-
+            setElevation(defaultElevation);
         } else {
             return;
         }

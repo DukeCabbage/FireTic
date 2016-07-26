@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.cabbage.firetic.ui.gameboard.GameboardSector
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/gameboard_sector"
-    android:layout_width="160dp"
-    android:layout_height="160dp"
-    android:background="@color/divider"
-    android:clickable="true"
-    android:layout_centerInParent="true"
-    tools:layout_height="320dp"
-    tools:layout_width="320dp"
-    tools:layout_gravity="center">
+    android:layout_width="@dimen/sector_size"
+    android:layout_height="@dimen/sector_size"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="@dimen/sector_default_elevation"
+    app:cardUseCompatPadding="true"
+    tools:layout_gravity="center"
+    tools:showIn="@layout/simple_relativelayout">
 
     <TableLayout
-        android:id="@+id/gameboard_table_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/divider"
-        android:showDividers="beginning"
+        android:background="@color/divider"
         android:stretchColumns="0,1,2">
 
         <TableRow
@@ -27,20 +24,20 @@
             <View
                 android:id="@+id/btn_0"
                 style="@style/board_unit"
-                android:tag="0"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="0"/>
 
             <View
                 android:id="@+id/btn_1"
                 style="@style/board_unit"
-                android:tag="1"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="1"/>
 
             <View
                 android:id="@+id/btn_2"
                 style="@style/board_unit"
-                android:tag="2"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="2"/>
 
         </TableRow>
 
@@ -51,20 +48,20 @@
             <View
                 android:id="@+id/btn_3"
                 style="@style/board_unit"
-                android:tag="3"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="3"/>
 
             <View
                 android:id="@+id/btn_4"
                 style="@style/board_unit"
-                android:tag="4"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="4"/>
 
             <View
                 android:id="@+id/btn_5"
                 style="@style/board_unit"
-                android:tag="5"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="5"/>
 
         </TableRow>
 
@@ -75,20 +72,20 @@
             <View
                 android:id="@+id/btn_6"
                 style="@style/board_unit"
-                android:tag="6"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="6"/>
 
             <View
                 android:id="@+id/btn_7"
                 style="@style/board_unit"
-                android:tag="7"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="7"/>
 
             <View
                 android:id="@+id/btn_8"
                 style="@style/board_unit"
-                android:tag="8"
-                android:background="@color/white_smoke"/>
+                android:background="@color/white_smoke"
+                android:tag="8"/>
         </TableRow>
 
     </TableLayout>

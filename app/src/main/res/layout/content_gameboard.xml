@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:background="@color/primary_light"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_gameboard">
+
+    <com.cabbage.firetic.ui.gameboard.Gameboard
+        android:id="@+id/gameboard"
+        android:layout_width="@dimen/board_size"
+        android:layout_height="@dimen/board_size"
+        android:layout_centerInParent="true"
+        android:clipChildren="false"
+        android:clipToPadding="false"/>
+
+    <View
+        android:id="@+id/dismiss_area_left"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/gameboard"
+        android:alpha="0.0"
+        android:background="@color/white_smoke"
+        android:clickable="true"/>
+
+    <View
+        android:id="@+id/dismiss_area_right"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/gameboard"
+        android:alpha="0.0"
+        android:background="@color/white_smoke"
+        android:clickable="true"/>
+
+    <View
+        android:id="@+id/dismiss_area_top"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/dismiss_area_left"
+        android:layout_toStartOf="@id/dismiss_area_right"
+        android:layout_above="@id/gameboard"
+        android:alpha="0.0"
+        android:background="@color/white_smoke"
+        android:clickable="true"/>
+
+    <View
+        android:id="@+id/dismiss_area_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/dismiss_area_left"
+        android:layout_toStartOf="@id/dismiss_area_right"
+        android:layout_below="@id/gameboard"
+        android:alpha="0.0"
+        android:background="@color/white_smoke"
+        android:clickable="true"/>
+
+</RelativeLayout>
