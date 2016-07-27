@@ -1,5 +1,8 @@
 package com.cabbage.firetic.ui.gameboard;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -8,8 +11,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.cabbage.firetic.R;
+import com.cabbage.firetic.ui.uiUtils.MyAnimatorListener;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -22,6 +27,9 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class GameboardSector extends CardView {
+
+    Order.HorizontalOrder horizontalOrder = Order.HorizontalOrder.CENTER;
+    Order.VerticalOrder verticalOrder = Order.VerticalOrder.CENTER;
 
     public final int TOTAL_GRID_NUMBER = 9;
     @BindColor(R.color.primary) int colorPrimary;
@@ -135,15 +143,33 @@ public class GameboardSector extends CardView {
         final ViewPropertyAnimator animator = this.animate();
         int width = this.getWidth();
         int height = this.getHeight();
-        this.setPivotX(width / 2);
-        this.setPivotY(height / 2);
+        switch (horizontalOrder) {
+            case LEFT:
+                this.setPivotX((int)(width * 0.1));
+                break;
+            case RIGHT:
+                this.setPivotX((int)(width * 0.9));
+                break;
+            default:
+                this.setPivotX(width / 2);
+        }
+
+        switch (verticalOrder) {
+            case TOP:
+                this.setPivotY((int)(height * 0.1));
+                break;
+            case BOTTOM:
+                this.setPivotY((int)(height * 0.9));
+                break;
+            default:
+                this.setPivotY(height / 2);
+        }
+
         if (currentScale == 1 && isEnlarging) {
-            float scaleTo = 2;
+            float scaleTo = 3.0f;
             animator.scaleX(scaleTo).scaleY(scaleTo);
-            setElevation(2f * defaultElevation);
         } else if (!isEnlarging) {
             animator.scaleX(1).scaleY(1);
-            setElevation(defaultElevation);
         } else {
             return;
         }
@@ -151,11 +177,54 @@ public class GameboardSector extends CardView {
 
         animator.setDuration(333L)
                 .setInterpolator(new AccelerateDecelerateInterpolator())
-//                .setListener(new MyAnimatorListener(new WeakReference<>((View) this)))
+                .setListener(new ElevationSetter(new WeakReference<>((View) this)))
                 .start();
+
+        ValueAnimator ani = ValueAnimator.ofFloat(0f, 1f);
+        ani.setTarget(this);
+        ani.setDuration(333L);
+        ani.setInterpolator(new LinearInterpolator());
+        ani.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float dfdfd = (float) valueAnimator.getAnimatedValue();
+                Timber.e(dfdfd + "");
+                valueAnimator.tar
+            }
+        });
+        ani.start();
     }
 
     public interface EventListener {
         void userMoveMade(int player, int location);
+    }
+
+    private class ElevationSetter extends MyAnimatorListener {
+
+        public ElevationSetter(WeakReference<View> wfView) {
+            super(wfView);
+        }
+
+        @Override
+        public void onAnimationStart(Animator animator) {
+            super.onAnimationStart(animator);
+            View view = wfTargetView.get();
+            if (view != null) {
+                if (view.getScaleX() == 1.0) {
+                    view.setElevation(2.0f * defaultElevation);
+                }
+            }
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            super.onAnimationEnd(animator);
+            View view = wfTargetView.get();
+            if (view != null) {
+                if (view.getScaleX() == 1.0) {
+                    view.setElevation(defaultElevation);
+                }
+            }
+        }
     }
 }

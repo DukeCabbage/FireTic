@@ -3,8 +3,20 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/zoom_in"
           android:title="Zoom in"
+          android:visible="false"
           app:showAsAction="never" />
     <item android:id="@+id/zoom_out"
           android:title="Zoom out"
+          android:visible="false"
+          app:showAsAction="never" />
+
+    <item android:id="@+id/increase_blue"
+          android:title="Increase Blue"
+          android:visible="true"
+          app:showAsAction="never" />
+
+    <item android:id="@+id/increase_red"
+          android:title="Increase red"
+          android:visible="true"
           app:showAsAction="never" />
 </menu>

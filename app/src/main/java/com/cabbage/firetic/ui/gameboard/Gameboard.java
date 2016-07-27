@@ -18,42 +18,29 @@ public class Gameboard extends RelativeLayout implements View.OnClickListener {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         int count = 0;
-        for (VerticalOrder vo : VerticalOrder.values()) {
-            for (HorizontalOrder ho : HorizontalOrder.values()) {
+        for (Order.VerticalOrder vo : Order.VerticalOrder.values()) {
+            for (Order.HorizontalOrder ho : Order.HorizontalOrder.values()) {
                 GameboardSector tempSector = (GameboardSector) inflater.inflate(R.layout.view_gameboard_sector, this, false);
                 // 0,1,2
                 // 3,4,5
                 // 6,7,8
                 tempSector.setTag(count++);
+                tempSector.verticalOrder = vo;
+                tempSector.horizontalOrder = ho;
                 attachSector(tempSector, vo, ho);
             }
         }
     }
 
-    static int orderToIndex(VerticalOrder vo, HorizontalOrder ho) {
-        int vi = vo.ordinal();
-        int hi = ho.ordinal();
-        return vi * HorizontalOrder.values().length + hi;
-    }
 
-    static VerticalOrder indexToVerticalOrder(int index) {
-        int columnCount = HorizontalOrder.values().length;
-        return VerticalOrder.values()[index / columnCount];
-    }
-
-    static HorizontalOrder indexToHorizontalOrder(int index) {
-        int columnCount = HorizontalOrder.values().length;
-        return HorizontalOrder.values()[index % columnCount];
-    }
-
-    private void attachSector(GameboardSector sector, VerticalOrder vo, HorizontalOrder ho) {
+    private void attachSector(GameboardSector sector, Order.VerticalOrder vo, Order.HorizontalOrder ho) {
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) sector.getLayoutParams();
         setAlignments(lp, vo, ho);
         sector.setOnClickListener(this);
         this.addView(sector);
     }
 
-    private void setAlignments(RelativeLayout.LayoutParams lp, VerticalOrder vo, HorizontalOrder ho) {
+    private void setAlignments(RelativeLayout.LayoutParams lp, Order.VerticalOrder vo, Order.HorizontalOrder ho) {
         switch (vo) {
             case TOP:
                 lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -84,20 +71,17 @@ public class Gameboard extends RelativeLayout implements View.OnClickListener {
             if (index == currentFocus) {
                 ((GameboardSector) view).focusOnSector(false);
             } else {
-                if (currentFocus != -1) {
-                    ((GameboardSector) getChildAt(currentFocus)).focusOnSector(false);
-                }
+                unFocusAll();
                 ((GameboardSector) view).focusOnSector(true);
                 currentFocus = index;
             }
         }
     }
 
-    enum VerticalOrder {
-        TOP, CENTER, BOTTOM
-    }
-
-    enum HorizontalOrder {
-        LEFT, CENTER, RIGHT
+    public void unFocusAll() {
+        if (currentFocus != -1) {
+            ((GameboardSector) getChildAt(currentFocus)).focusOnSector(false);
+            currentFocus = -1;
+        }
     }
 }

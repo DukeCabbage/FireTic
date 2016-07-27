@@ -9,7 +9,7 @@ import timber.log.Timber;
 
 public class MyAnimatorListener implements Animator.AnimatorListener {
 
-    final WeakReference<View> wfTargetView;
+   protected final WeakReference<View> wfTargetView;
 
     public MyAnimatorListener(WeakReference<View> wfView) {
         wfTargetView = wfView;
@@ -23,8 +23,8 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
             float x = view.getX();
             float pivotX = view.getPivotX();
             int height = view.getHeight();
-            Timber.i("Anim start with: ");
-            Timber.i("Scale: %f, x: %f, pivot: %f, height: %d", currentScale, x, pivotX, height);
+//            Timber.i("Anim start with: ");
+//            Timber.i("Scale: %f, x: %f, pivot: %f, height: %d", currentScale, x, pivotX, height);
         }
     }
 
@@ -36,8 +36,8 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
             float x = view.getX();
             float pivotX = view.getPivotX();
             int height = view.getHeight();
-            Timber.i("Anim end with: ");
-            Timber.i("Scale: %f, x: %f, pivot: %f, height: %d", currentScale, x, pivotX, height);
+//            Timber.i("Anim end with: ");
+//            Timber.i("Scale: %f, x: %f, pivot: %f, height: %d", currentScale, x, pivotX, height);
         }
     }
 
