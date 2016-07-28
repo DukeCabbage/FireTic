@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 
+import com.cabbage.firetic.BuildConfig;
 import com.cabbage.firetic.R;
+import com.cabbage.firetic.ui.uiUtils.Constants;
 import com.cabbage.firetic.ui.uiUtils.MyAnimatorListener;
 
 import java.lang.ref.WeakReference;
@@ -25,12 +28,9 @@ public class GameboardActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.gameboard) Gameboard mGameboard;
-
     @BindView(R.id.barContainer) View barContainer;
-//    @BindView(R.id.bar1) View bar1;
-//    @BindView(R.id.bar2) View bar2;
 
-    private float playerBarShift = 180;
+    private float playerBarShift = 180; // Default value, overridden in onStart
 
     @SuppressWarnings("unused")
     @OnClick({R.id.dismiss_area_left, R.id.dismiss_area_right, R.id.dismiss_area_top, R.id.dismiss_area_bottom})
@@ -86,13 +86,66 @@ public class GameboardActivity extends AppCompatActivity {
 //                sector.focusOnSector(false);
                 return true;
             case R.id.increase_blue:
-                barContainer.animate().translationX(playerBarShift).setDuration(333L).setListener(new MyAnimatorListener(new WeakReference<>(barContainer))).start();
+                toggleUserIndicator(1);
                 return true;
             case R.id.increase_red:
-                barContainer.animate().translationX(-playerBarShift).setDuration(333L).setListener(new MyAnimatorListener(new WeakReference<>(barContainer))).start();
+                toggleUserIndicator(2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Player info
+     */
+
+    public void toggleUserIndicator(int player) {
+        if (BuildConfig.DEBUG && (player < 0 || player > 2))
+            throw new AssertionError();
+
+        Timber.d("toggleUserIndicator %d", player);
+        ViewPropertyAnimator animator = barContainer.animate();
+        switch (player) {
+            case 1:
+                animator.translationX(playerBarShift).setDuration(333L);
+                break;
+            case 2:
+                animator.translationX(-playerBarShift).setDuration(333L);
+                break;
+            default:
+                animator.translationX(0).setDuration(0);
+        }
+
+        animator.setListener(new MyAnimatorListener(new WeakReference<>(barContainer)))
+                .start();
+    }
+
+    /**
+     * Gameboard
+    */
+
+    public void refreshBoard(int[] moves) {
+        if (BuildConfig.DEBUG && moves.length != Constants.BoardCount * Constants.GridCount)
+            throw new AssertionError();
+
+        boolean success = mGameboard.placeMoves(moves);
+        Timber.d("Successfully refreshed whole board");
+    }
+
+    public void refreshBoard(int boardIndex, int gridIndex, int player) {
+        if (BuildConfig.DEBUG) {
+            boolean bool1 = boardIndex < 0 || boardIndex >= Constants.BoardCount;
+            boolean bool2 = gridIndex < 0 || gridIndex >= Constants.GridCount;
+            if (bool1 || bool2)
+                throw new AssertionError();
+        }
+
+
+        boolean success =  mGameboard.placeMove(boardIndex, gridIndex, player);
+        if (success)
+            Timber.d("Successfully placed a move at (%d, %d), player %d", boardIndex, gridIndex, player);
+        else
+            Timber.d("Failed to  placed a move at (%d, %d), player %d", boardIndex, gridIndex, player);
     }
 }

@@ -9,6 +9,7 @@
     </style>
 
     <style name="board_unit">
+        <item name="android:clickable">true</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:background">#F5F5F5</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
