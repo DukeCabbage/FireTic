@@ -2,13 +2,77 @@
 <android.support.design.widget.CoordinatorLayout
     android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".ui.gameboard.GameboardActivity">
 
     <include layout="@layout/include_appbar"/>
 
     <include layout="@layout/content_gameboard"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_players"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:id="@+id/barContainer"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="-300dp"
+            android:layout_marginEnd="-300dp"
+            android:layout_marginBottom="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/bar1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/player1"/>
+
+            <View
+                android:id="@+id/bar2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/player2"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_player1_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp"
+            android:layout_below="@id/barContainer"
+            android:text="Name a"
+            android:textColor="@color/player1"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_player2_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:layout_below="@id/barContainer"
+            android:fontFamily="sans-serif"
+            android:text="Name b"
+            android:textColor="@color/player2"
+            android:textSize="18sp"/>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -19,12 +19,8 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
     public void onAnimationStart(Animator animator) {
         View view = wfTargetView.get();
         if (view != null) {
-            float currentScale = view.getScaleX();
-            float x = view.getX();
-            float pivotX = view.getPivotX();
-            int height = view.getHeight();
-//            Timber.i("Anim start with: ");
-//            Timber.i("Scale: %f, x: %f, pivot: %f, height: %d", currentScale, x, pivotX, height);
+            Timber.i("Anim start with: ");
+            printAttributes(view);
         }
     }
 
@@ -32,12 +28,8 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
     public void onAnimationEnd(Animator animator) {
         View view = wfTargetView.get();
         if (view != null) {
-            float currentScale = view.getScaleX();
-            float x = view.getX();
-            float pivotX = view.getPivotX();
-            int height = view.getHeight();
-//            Timber.i("Anim end with: ");
-//            Timber.i("Scale: %f, x: %f, pivot: %f, height: %d", currentScale, x, pivotX, height);
+            Timber.i("Anim end with: ");
+            printAttributes(view);
         }
     }
 
@@ -46,4 +38,14 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
 
     @Override
     public void onAnimationRepeat(Animator animator) {}
+
+    private void printAttributes(View view) {
+        int width = view.getWidth();
+        float currentScale = view.getScaleX();
+        float x = view.getX();
+        float pivotX = view.getPivotX();
+        int height = view.getHeight();
+
+        Timber.i("Width : %d, Scale: %f, x: %f, pivot: %f, height: %d", width, currentScale, x, pivotX, height);
+    }
 }

@@ -179,20 +179,6 @@ public class GameboardSector extends CardView {
                 .setInterpolator(new AccelerateDecelerateInterpolator())
                 .setListener(new ElevationSetter(new WeakReference<>((View) this)))
                 .start();
-
-        ValueAnimator ani = ValueAnimator.ofFloat(0f, 1f);
-        ani.setTarget(this);
-        ani.setDuration(333L);
-        ani.setInterpolator(new LinearInterpolator());
-        ani.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float dfdfd = (float) valueAnimator.getAnimatedValue();
-                Timber.e(dfdfd + "");
-                valueAnimator.tar
-            }
-        });
-        ani.start();
     }
 
     public interface EventListener {
