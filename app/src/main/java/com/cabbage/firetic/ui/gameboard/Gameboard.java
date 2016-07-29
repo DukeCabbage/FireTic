@@ -1,6 +1,8 @@
 package com.cabbage.firetic.ui.gameboard;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +20,13 @@ public class Gameboard extends RelativeLayout
         implements View.OnClickListener {
 
     private Callback mCallback;
-    private int currentlyZoomed = Constants.Invalid;
-    private int currentlyUnlocked = Constants.Invalid;
+    private int currentlyZoomed = Constants.NotChosen;
+    private int currentlyUnlocked = Constants.NotChosen;
 
     private int mCurrentPlayer = Constants.Player1Token;
 //    private int mOwnerShip[] = new int[Constants.BoardCount * Constants.GridCount];
 
+    private int mGlobalWinner = Constants.OpenGrid;
     private int[] mLocalWinners = new int[Constants.BoardCount];
     private int[][] gridOwnership = new int[Constants.GridCount][Constants.BoardCount];
 
@@ -47,6 +50,35 @@ public class Gameboard extends RelativeLayout
                 attachSector(tempSector, vo, ho);
             }
         }
+    }
+
+    public static int checkWin(int[] array) {
+        // Diagonals
+        if (array[4] != Constants.OpenGrid) {
+            if (checkSame(array[0], array[4], array[8])
+                    || checkSame(array[2], array[4], array[6]))
+                return array[4];
+        }
+
+        // Rows
+        for (int i = 0; i < 9; i += 3) {
+            if (array[i] != Constants.OpenGrid && checkSame(array[i], array[i + 1], array[i + 2])) {
+                return array[i];
+            }
+        }
+
+        // Columns
+        for (int j = 0; j < 3; j++) {
+            if (array[j] != Constants.OpenGrid && checkSame(array[j], array[j + 3], array[j + 6])) {
+                return array[j];
+            }
+        }
+
+        return Constants.OpenGrid;
+    }
+
+    public static boolean checkSame(int a, int b, int c) {
+        return a == b && b == c;
     }
 
     public void setCallback(Callback mCallback) { this.mCallback = mCallback; }
@@ -91,17 +123,29 @@ public class Gameboard extends RelativeLayout
             if (index == currentlyZoomed) {
                 ((GameboardSector) view).focusOnSector(false);
             } else {
-                unFocusAll();
-                ((GameboardSector) view).focusOnSector(true);
-                currentlyZoomed = index;
+                focusOnSector(index);
             }
+        }
+    }
+
+    public void focusOnSector(int i) {
+        if (currentlyZoomed != i) {
+            unFocusAll();
+            mSectorList.get(i).focusOnSector(true);
+            currentlyZoomed = i;
+        }
+    }
+
+    public void unFocusOnSector(int i) {
+        if (currentlyZoomed == i) {
+            mSectorList.get(i).focusOnSector(false);
+            currentlyZoomed = Constants.NotChosen;
         }
     }
 
     public void unFocusAll() {
         if (currentlyZoomed != Constants.NotChosen) {
-            ((GameboardSector) getChildAt(currentlyZoomed)).focusOnSector(false);
-            currentlyZoomed = Constants.NotChosen;
+            unFocusOnSector(currentlyZoomed);
         }
     }
 
@@ -112,23 +156,25 @@ public class Gameboard extends RelativeLayout
             // This board is locked
             Timber.d("This grid is locked");
             return Constants.Invalid;
-        } else if (gridOwnership[boardIndex][gridIndex] != Constants.NotChosen) {
+        } else if (gridOwnership[boardIndex][gridIndex] != Constants.OpenGrid) {
             // Already set
             Timber.d("This grid is occupied");
             return Constants.Invalid;
         } else {
             gridOwnership[boardIndex][gridIndex] = mCurrentPlayer;
-            if (mLocalWinners[boardIndex] != Constants.NotChosen) {
+            // Occupied sector is still playable by opponent, so do not allow overriding
+            if (mLocalWinners[boardIndex] == Constants.OpenGrid) {
                 int tempLocalWinner = checkWin(gridOwnership[boardIndex]);
-                if (tempLocalWinner != Constants.NotChosen) {
+                if (tempLocalWinner != Constants.OpenGrid) {
                     Timber.i("Local winner at board %d is %d", boardIndex, tempLocalWinner);
                     mLocalWinners[boardIndex] = tempLocalWinner;
                     mSectorList.get(boardIndex).setLocalWinner(tempLocalWinner);
 
-                    int globalWinner = checkWin(mLocalWinners);
-                    if (globalWinner != Constants.NotChosen) {
-                        Timber.i("Global winner is %d, locking whole board", globalWinner);
+                    mGlobalWinner = checkWin(mLocalWinners);
+                    if (mGlobalWinner != Constants.OpenGrid) {
+                        Timber.i("Global winner is %d, locking whole board", mGlobalWinner);
                         currentlyUnlocked = Constants.Invalid;
+                        unFocusAll();
                     }
                 }
             }
@@ -136,13 +182,20 @@ public class Gameboard extends RelativeLayout
             // Notify observers
             if (mCallback != null) {
                 int index = boardIndex * Constants.GridCount + gridIndex;
-                mCallback.userClicked(index, mCurrentPlayer);
+                mCallback.userClicked(index, mCurrentPlayer == Constants.Player1Token ? Constants.Player2Token : Constants.Player1Token);
+
+                if (mGlobalWinner != Constants.OpenGrid) {
+                    mCallback.gameEnded(mCurrentPlayer);
+                }
             }
 
             // Unlock sector
-            currentlyUnlocked = gridIndex;
-            if (currentlyUnlocked != currentlyZoomed) {
-                unFocusAll();
+            if (currentlyUnlocked != Constants.Invalid) {
+                currentlyUnlocked = gridIndex;
+                // Zoom to next sector
+                if (currentlyUnlocked != currentlyZoomed) {
+                    focusOnSector(currentlyUnlocked);
+                }
             }
 
             // Toggle current player, notify sector to draw
@@ -181,34 +234,6 @@ public class Gameboard extends RelativeLayout
 
     interface Callback {
         void userClicked(int index, int player);
-    }
-
-    public static int checkWin(int[] array) {
-        // Diagonals
-        if (array[4] != Constants.NotChosen) {
-            if (checkSame(array[0], array[4], array[8])
-                    || checkSame(array[2], array[4], array[6]))
-                return array[4];
-        }
-
-        // Rows
-        for (int i = 0; i < 9; i+=3) {
-            if (array[i] != Constants.NotChosen && checkSame(array[i], array[i + 1], array[i + 2])) {
-                return array[i];
-            }
-        }
-
-        // Columns
-        for (int j = 0; j < 3; j++) {
-            if (array[j] != Constants.NotChosen && checkSame(array[j], array[j + 3], array[j + 6])) {
-                return array[j];
-            }
-        }
-
-        return Constants.NotChosen;
-    }
-
-    public static boolean checkSame(int a, int b, int c) {
-        return a==b && b==c;
+        void gameEnded(int winner);
     }
 }

@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 import timber.log.Timber;
 
 public class MyAnimatorListener implements Animator.AnimatorListener {
+    final boolean logEnabled = false;
 
    protected final WeakReference<View> wfTargetView;
 
@@ -19,8 +20,10 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
     public void onAnimationStart(Animator animator) {
         View view = wfTargetView.get();
         if (view != null) {
+            if (logEnabled) {
             Timber.i("Anim start with: ");
-            printAttributes(view);
+                printAttributes(view);
+            }
         }
     }
 
@@ -28,8 +31,10 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
     public void onAnimationEnd(Animator animator) {
         View view = wfTargetView.get();
         if (view != null) {
+            if (logEnabled) {
             Timber.i("Anim end with: ");
-            printAttributes(view);
+                printAttributes(view);
+            }
         }
     }
 

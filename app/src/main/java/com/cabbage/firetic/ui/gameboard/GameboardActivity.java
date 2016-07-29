@@ -1,5 +1,7 @@
 package com.cabbage.firetic.ui.gameboard;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -88,10 +90,11 @@ public class GameboardActivity extends AppCompatActivity
 //                sector.focusOnSector(false);
                 return true;
             case R.id.increase_blue:
-                toggleUserIndicator(1);
+                toggleUserIndicator(Constants.Player1Token, false);
                 return true;
             case R.id.increase_red:
-                toggleUserIndicator(2);
+//                toggleUserIndicator(Constants.Player2Token, true);
+                gameEnded(Constants.Player2Token);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -102,18 +105,18 @@ public class GameboardActivity extends AppCompatActivity
      * Player info
      */
 
-    public void toggleUserIndicator(int player) {
-        if (BuildConfig.DEBUG && (player < 0 || player > 2))
+    public void toggleUserIndicator(int player, boolean isWinner) {
+        if (BuildConfig.DEBUG && (player < Constants.Player2Token || player > Constants.Player1Token))
             throw new AssertionError();
 
         Timber.d("toggleUserIndicator %d", player);
         ViewPropertyAnimator animator = barContainer.animate();
         switch (player) {
-            case 1:
-                animator.translationX(playerBarShift).setDuration(333L);
+            case Constants.Player1Token:
+                animator.translationX(isWinner ? 2 * playerBarShift : playerBarShift).setDuration(667L);
                 break;
-            case 2:
-                animator.translationX(-playerBarShift).setDuration(333L);
+            case Constants.Player2Token:
+                animator.translationX(isWinner ? -2 * playerBarShift : -playerBarShift).setDuration(667L);
                 break;
             default:
                 animator.translationX(0).setDuration(0);
@@ -153,6 +156,18 @@ public class GameboardActivity extends AppCompatActivity
 
     @Override
     public void userClicked(int index, int player) {
-        toggleUserIndicator(player);
+        toggleUserIndicator(player, false);
+    }
+
+    @Override
+    public void gameEnded(int winner) {
+        toggleUserIndicator(winner, true);
+
+        new AlertDialog.Builder(this).setMessage("Game over").setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
     }
 }

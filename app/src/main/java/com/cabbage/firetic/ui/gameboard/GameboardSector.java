@@ -6,7 +6,6 @@ import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TableLayout;
@@ -88,7 +87,7 @@ public class GameboardSector extends CardView {
             grid.setBackgroundColor(colorPlayer1);
         } else if (player == Constants.Player2Token) {
             grid.setBackgroundColor(colorPlayer2);
-        } else if (player == Constants.NotChosen) {
+        } else if (player == Constants.OpenGrid) {
             grid.setBackgroundColor(colorWhiteSmoke);
         }
 
