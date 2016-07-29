@@ -6,7 +6,7 @@
 
     <!-- TODO: adjust dynamically according to screen size-->
     <dimen name="board_size">320dp</dimen>
-    <dimen name="sector_size">100dp</dimen>
+    <dimen name="sector_size">84dp</dimen>
 
     <dimen name="sector_default_elevation">2dp</dimen>
 </resources>

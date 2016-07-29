@@ -24,7 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class GameboardActivity extends AppCompatActivity {
+public class GameboardActivity extends AppCompatActivity
+        implements Gameboard.Callback {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.gameboard) Gameboard mGameboard;
@@ -44,6 +45,7 @@ public class GameboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gameboard);
         ButterKnife.bind(this);
         setUpAppBar();
+        mGameboard.setCallback(this);
     }
 
     private void setUpAppBar() {
@@ -125,11 +127,11 @@ public class GameboardActivity extends AppCompatActivity {
      * Gameboard
     */
 
-    public void refreshBoard(int[] moves) {
+    public void refreshBoard(int[] localWinners, int[] moves) {
         if (BuildConfig.DEBUG && moves.length != Constants.BoardCount * Constants.GridCount)
             throw new AssertionError();
 
-        boolean success = mGameboard.placeMoves(moves);
+        boolean success = mGameboard.placeMoves(localWinners, moves);
         Timber.d("Successfully refreshed whole board");
     }
 
@@ -147,5 +149,10 @@ public class GameboardActivity extends AppCompatActivity {
             Timber.d("Successfully placed a move at (%d, %d), player %d", boardIndex, gridIndex, player);
         else
             Timber.d("Failed to  placed a move at (%d, %d), player %d", boardIndex, gridIndex, player);
+    }
+
+    @Override
+    public void userClicked(int index, int player) {
+        toggleUserIndicator(player);
     }
 }

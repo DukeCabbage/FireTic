@@ -6,8 +6,10 @@ import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.TableLayout;
 
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.ui.uiUtils.Constants;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindColor;
 import butterknife.BindDimen;
+import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,18 +31,22 @@ public class GameboardSector extends CardView {
     Order.HorizontalOrder horizontalOrder = Order.HorizontalOrder.CENTER;
     Order.VerticalOrder verticalOrder = Order.VerticalOrder.CENTER;
     @BindColor(R.color.white_smoke) int colorWhiteSmoke;
+    @BindColor(R.color.divider) int colorDivider;
     @BindColor(R.color.player1) int colorPlayer1;
     @BindColor(R.color.player2) int colorPlayer2;
 
     @BindDimen(R.dimen.sector_default_elevation) float defaultElevation;
 
+    @BindView(R.id.sectorTableLayout) TableLayout mTable;
     @BindViews({R.id.btn_0, R.id.btn_1, R.id.btn_2,
             R.id.btn_3, R.id.btn_4, R.id.btn_5,
             R.id.btn_6, R.id.btn_7, R.id.btn_8})
     List<View> gridList;
-    private int mBoardIndex = -1;
+
     private Gameboard mGameboard;
     private boolean zoomedIn = false;
+
+    private int mBoardIndex = Constants.Invalid;
 
     public GameboardSector(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -81,11 +88,21 @@ public class GameboardSector extends CardView {
             grid.setBackgroundColor(colorPlayer1);
         } else if (player == Constants.Player2Token) {
             grid.setBackgroundColor(colorPlayer2);
-        } else if (player == Constants.OpenGrid) {
+        } else if (player == Constants.NotChosen) {
             grid.setBackgroundColor(colorWhiteSmoke);
         }
 
         return true;
+    }
+
+    void setLocalWinner(int player) {
+        if (player == Constants.Player1Token) {
+            this.mTable.setBackgroundColor(colorPlayer1);
+        } else if (player == Constants.Player2Token) {
+            this.mTable.setBackgroundColor(colorPlayer2);
+        } else {
+            this.mTable.setBackgroundColor(colorDivider);
+        }
     }
 
     @Override

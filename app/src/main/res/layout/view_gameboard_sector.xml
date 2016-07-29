@@ -12,6 +12,7 @@
     tools:showIn="@layout/simple_relativelayout">
 
     <TableLayout
+        android:id="@+id/sectorTableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/divider"
