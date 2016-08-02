@@ -28,16 +28,11 @@ import timber.log.Timber;
 public class LoungeActivity extends AppCompatActivity {
 
     //region Outlets
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.et_username)
-    EditText etUsername;
-    @BindView(R.id.et_password)
-    EditText etPassword;
-    @BindView(R.id.et_game_id)
-    EditText etGameId;
-    @BindView(R.id.btn_connect)
-    Button btnConnect;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.et_username) EditText etUsername;
+    @BindView(R.id.et_password) EditText etPassword;
+    @BindView(R.id.et_game_id) EditText etGameId;
+    @BindView(R.id.btn_connect) Button btnConnect;
     //endregion
 
     //region Actions
