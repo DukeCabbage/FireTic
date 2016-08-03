@@ -1,7 +1,9 @@
 package com.cabbage.firetic.dagger;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.cabbage.firetic.model.DataManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,6 +24,12 @@ public interface AppComponent {
     @Named("application")
     Context appContext();
 
+    SharedPreferences getSharedPreferences();
+
+    DataManager getDataManager();
+
+    /** ---------------------------------------------------------------------------------------- */
+
     FirebaseDatabase fireDB();
 
     @Named("user")
@@ -29,6 +37,8 @@ public interface AppComponent {
 
     @Named("game")
     DatabaseReference getGamesRef();
+
+    /** ---------------------------------------------------------------------------------------- */
 
     Retrofit getRetrofit();
 }

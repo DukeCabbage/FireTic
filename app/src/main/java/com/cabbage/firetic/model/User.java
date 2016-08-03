@@ -2,24 +2,23 @@ package com.cabbage.firetic.model;
 
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class User {
+public class User implements Serializable {
 
     private String userId;
     private String userName;
-    private String password;
     private List<String> matchIdList;
 
     public User() {
     }
 
-    public User(String userId, String userName, String password) {
+    public User(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;
-        this.password = password;
         this.matchIdList = new ArrayList<>();
         matchIdList.add("first game");
         matchIdList.add("second game");
@@ -40,14 +39,6 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public List<String> getMatchIdList() {
