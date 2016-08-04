@@ -17,13 +17,13 @@
         <activity
             android:name=".ui.gameboard.GameboardActivity"
             android:label="Gameboard"
-            android:parentActivityName=".ui.LoungeActivity"
+            android:parentActivityName=".ui.lounge.LoungeActivity"
             android:screenOrientation="portrait">
 
         </activity>
 
         <activity
-            android:name=".ui.LoungeActivity"
+            android:name=".ui.lounge.LoungeActivity"
             android:label="Lounge"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
