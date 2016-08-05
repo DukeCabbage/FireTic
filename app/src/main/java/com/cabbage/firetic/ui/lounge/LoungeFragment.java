@@ -15,6 +15,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class LoungeFragment extends Fragment {
 
@@ -47,7 +48,14 @@ public class LoungeFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        Timber.d("onStop");
+    }
+
+    @Override
     public void onDestroyView() {
+        Timber.d("onDestroyView");
         super.onDestroyView();
         unbinder.unbind();
     }

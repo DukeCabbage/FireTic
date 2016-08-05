@@ -21,6 +21,8 @@ import retrofit2.Retrofit;
 })
 public interface AppComponent {
 
+    /** ---------------------------------------------------------------------------------------- */
+
     @Named("application")
     Context appContext();
 

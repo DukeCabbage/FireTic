@@ -41,6 +41,7 @@ public class DataManager {
             @Override
             public void call(final Subscriber<? super User> subscriber) {
                 Query existingUserQuery = userRef.orderByChild("userName").equalTo(inputUserName);
+
                 existingUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -59,8 +60,7 @@ public class DataManager {
                             newUserRef.setValue(user);
                         }
 
-                        activeUser = user;
-                        cacheActiveUser();
+                        saveActiveUser(user);
                         subscriber.onNext(user);
                         subscriber.onCompleted();
                     }
@@ -91,11 +91,13 @@ public class DataManager {
         sharedPreferences.edit().remove(SPKEY_ACTIVE_USER).apply();
     }
 
-    private void cacheActiveUser() {
+    // TODO: Change access level to private
+    public void saveActiveUser(User user) {
+        activeUser = user;
         if (!CACHE_ENABLED)
             return;
         Gson gson = new Gson();
-        String userStr = gson.toJson(activeUser);
+        String userStr = gson.toJson(user);
         sharedPreferences.edit().putString(SPKEY_ACTIVE_USER, userStr).apply();
     }
 

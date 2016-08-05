@@ -1,77 +1,54 @@
 package com.cabbage.firetic.ui.lounge;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.model.DataManager;
 import com.cabbage.firetic.model.User;
+import com.cabbage.firetic.ui.base.BaseActivity;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
 
-import butterknife.BindColor;
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
+import timber.log.Timber;
 
-public class LoungeActivity extends AppCompatActivity {
+public class LoungeActivity extends BaseActivity implements LoungeMVPView {
 
+    DataManager mDataManager;
+    @Inject LoungePresenter loungePresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
-    DataManager mDataManager;
-    Subscription signInSubscription;
-
-    //region Actions
-//    @SuppressWarnings("unused")
-//    @OnClick(R.id.btn_connect)
-//    void connectOnClick(View view) {
-//
-//        final String inputUserName = etUsername.getText().toString();
-//        if (TextUtils.isEmpty(inputUserName)) {
-//            return;
-//        }
-//
-//        if (this.getCurrentFocus() != null) {
-//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//        }
-//
-//        DialogHelper.showProgressDialog(this, "Logging in");
-//        Observable<User> ob = mDataManager.signInAs(inputUserName);
-//        signInSubscription = ob.subscribe(new Action1<User>() {
-//            @Override
-//            public void call(User user) {
-//                Timber.d(user.getUserName());
-//                DialogHelper.dismissProgressDialog();
-//                checkIfSignedIn();
-//            }
-//        }, new Action1<Throwable>() {
-//            @Override
-//            public void call(Throwable throwable) {
-//                DialogHelper.dismissProgressDialog();
-//                Toast.makeText(LoungeActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
-    //endregion
+    SignInFragment signInFragment;
+    LoungeFragment loungeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lounge);
         ButterKnife.bind(this);
-        mDataManager = MyApplication.component().getDataManager();
         setUpAppBar();
 
-        if (savedInstanceState == null) {
-            checkIfSignedIn();
+        mDataManager = MyApplication.component().getDataManager();
+        mActivityComponent.inject(this);
+        if (loungePresenter == null) {
+            throw new RuntimeException("Presenter null");
         }
+
+        signInFragment = SignInFragment.newInstance();
+        loungeFragment = LoungeFragment.newInstance();
+
+        checkIfSignedIn();
     }
 
     private void setUpAppBar() {
@@ -87,11 +64,11 @@ public class LoungeActivity extends AppCompatActivity {
         User activeUser = mDataManager.getActiveUser();
         if (activeUser != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content, LoungeFragment.newInstance(), "loungeFragment")
+                    .replace(R.id.content, loungeFragment, "loungeFragment")
                     .commit();
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content, SignInFragment.newInstance(), "signInFragment")
+                    .replace(R.id.content, signInFragment, "signInFragment")
                     .commit();
         }
     }
@@ -108,32 +85,48 @@ public class LoungeActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.revoke_user:
-                mDataManager.revokeActiveUser();
-                checkIfSignedIn();
+                loungePresenter.revokeLogin();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        checkIfSignedIn();
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        loungePresenter.onTakeView(this);
+    }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (signInSubscription != null && !signInSubscription.isUnsubscribed())
-            signInSubscription.unsubscribe();
-
+        loungePresenter.onStopView();
         DialogHelper.dismissProgressDialog();
     }
 
-    void mockLogin() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content, LoungeFragment.newInstance(), "loungeFragment")
-                .commit();
+    /**-----------------------------------------------------------------------------------*/
+    @Override
+    public void loginSuccess(@NonNull User user) {
+        String message = String.format("Login as: %s", user.getUserName());
+        Timber.i(message);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        DialogHelper.dismissProgressDialog();
+
+        checkIfSignedIn();
+    }
+
+    @Override
+    public void loginFailed(@Nullable String message) {
+        String errorMessage = message == null ? "Login failed" : message;
+        Timber.e(errorMessage);
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        DialogHelper.dismissProgressDialog();
+    }
+
+    @Override
+    public void logout() {
+        Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+        checkIfSignedIn();
     }
 }
