@@ -2,8 +2,10 @@ package com.cabbage.firetic.ui.lounge;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,9 @@ public class LoungeFragment extends Fragment {
     private Unbinder unbinder;
     @BindColor(R.color.primary) int colorPrimary;
     @BindView(R.id.refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.rv_games) RecyclerView rvGames;
+    @BindView(R.id.empty_state) ViewGroup emptyState;
+    @BindView(R.id.fab_create_game) FloatingActionButton fabCreateGame;
 
     @Nullable
     @Override

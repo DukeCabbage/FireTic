@@ -24,4 +24,21 @@ public class RealLoungePresenter extends LoungePresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(signInSuccessPipe(), signInFailPipe());
     }
+
+    /**-------------------------------------------------------------------------------------*/
+
+    @Override
+    void getGames() {
+        throw new RuntimeException("Stub");
+    }
+
+    @Override
+    void createGame() {
+        throw new RuntimeException("Stub");
+    }
+
+    @Override
+    void deleteGame(String gameId, int position) {
+        throw new RuntimeException("Stub");
+    }
 }

@@ -11,7 +11,7 @@ import timber.log.Timber;
 
 public abstract class LoungePresenter {
 
-    protected LoungeMVPView view;
+    protected LoungeMVPView mView;
     protected DataManager mDataManager;
     protected Subscription signInSubscription;
 
@@ -19,12 +19,12 @@ public abstract class LoungePresenter {
         this.mDataManager = dataManager;
     }
 
-    void onTakeView(@NonNull LoungeMVPView view) {
-        this.view = view;
+    void onStartView(@NonNull LoungeMVPView view) {
+        this.mView = view;
     }
 
     void onStopView() {
-        view = null;
+        mView = null;
         if (signInSubscription != null && !signInSubscription.isUnsubscribed()) {
             signInSubscription.unsubscribe();
         }
@@ -34,7 +34,7 @@ public abstract class LoungePresenter {
 
     void revokeLogin() {
         mDataManager.revokeActiveUser();
-        view.logout();
+        mView.logout();
     }
 
     protected Action1<User> signInSuccessPipe() {
@@ -42,7 +42,7 @@ public abstract class LoungePresenter {
             @Override
             public void call(User user) {
                 Timber.d(user.getUserName());
-                view.loginSuccess(user);
+                mView.loginSuccess(user);
             }
         };
     }
@@ -52,8 +52,18 @@ public abstract class LoungePresenter {
             @Override
             public void call(Throwable throwable) {
                 Timber.e(throwable.getLocalizedMessage());
-                view.loginFailed(throwable.getLocalizedMessage());
+                mView.loginFailed(throwable.getLocalizedMessage());
             }
         };
     }
+
+    /**-------------------------------------------------------------------------------------*/
+
+    abstract void getGames();
+
+    abstract void createGame();
+
+    abstract void deleteGame(String gameId, int position);
+
+//    abstract void enterGame(String gameId, int position);
 }

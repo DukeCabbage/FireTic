@@ -36,4 +36,21 @@ public class MockLoungePresenter extends LoungePresenter {
                     }
                 }).subscribe(signInSuccessPipe(), signInFailPipe());
     }
+
+    /**-------------------------------------------------------------------------------------*/
+
+    @Override
+    void getGames() {
+
+    }
+
+    @Override
+    void createGame() {
+
+    }
+
+    @Override
+    void deleteGame(String gameId, int position) {
+
+    }
 }

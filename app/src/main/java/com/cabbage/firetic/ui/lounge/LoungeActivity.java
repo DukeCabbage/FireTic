@@ -95,7 +95,7 @@ public class LoungeActivity extends BaseActivity implements LoungeMVPView {
     @Override
     public void onStart() {
         super.onStart();
-        loungePresenter.onTakeView(this);
+        loungePresenter.onStartView(this);
     }
 
     @Override
