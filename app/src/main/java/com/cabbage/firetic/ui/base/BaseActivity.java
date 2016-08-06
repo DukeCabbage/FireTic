@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cabbage.firetic.dagger.ActivityComponent;
 import com.cabbage.firetic.dagger.DaggerActivityComponent;
+import com.cabbage.firetic.dagger.MyApplication;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -14,6 +15,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivityComponent = DaggerActivityComponent.builder().build();
+        mActivityComponent = DaggerActivityComponent
+                .builder()
+                .appComponent(MyApplication.component())
+                .build();
     }
 }

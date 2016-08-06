@@ -3,6 +3,7 @@ package com.cabbage.firetic.ui.lounge;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,15 @@ public class SignInFragment extends Fragment {
 
     @OnClick(R.id.btn_connect)
     void connectOnClick() {
-        DialogHelper.showProgressDialog(activity, "Logging in...");
-        activity.loungePresenter.mockLogin();
+        String inputUserName = etUsername.getText().toString();
+        boolean validUserName = !TextUtils.isEmpty(inputUserName);
+
+        if (validUserName) {
+            DialogHelper.showProgressDialog(activity, "Logging in...");
+            activity.loungePresenter.login(inputUserName);
+        } else {
+            etUsername.setError("User name can't be empty");
+        }
     }
 
     @Nullable
