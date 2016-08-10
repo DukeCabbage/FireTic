@@ -16,6 +16,8 @@ import com.cabbage.firetic.model.User;
 import com.cabbage.firetic.ui.base.BaseActivity;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -128,5 +130,17 @@ public class LoungeActivity extends BaseActivity implements LoungeMVPView {
     public void logout() {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
         checkIfSignedIn();
+    }
+
+    /**-----------------------------------------------------------------------------------*/
+
+    @Override
+    public void updateGameList(List<String> games) {
+
+    }
+
+    @Override
+    public void updateGame(String gameId) {
+
     }
 }
