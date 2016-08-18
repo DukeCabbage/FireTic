@@ -13,9 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.cabbage.firetic.R;
-import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.model.User;
-import com.cabbage.firetic.ui.lounge.LoungeActivityII;
+import com.cabbage.firetic.ui.lounge.LoungeActivity;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
 
 import butterknife.BindView;
@@ -29,7 +28,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     @BindView(R.id.et_username) EditText etUsername;
     @BindView(R.id.btn_connect) Button btnConnect;
     private Unbinder unbinder;
-    private LoungeActivityII activity;
+    private LoungeActivity activity;
     private SignInContract.Presenter mPresenter;
 
     public static SignInFragment newInstance() {
@@ -58,7 +57,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
-        activity = (LoungeActivityII) getActivity();
+        activity = (LoungeActivity) getActivity();
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
