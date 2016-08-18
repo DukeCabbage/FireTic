@@ -13,12 +13,29 @@ android {
         versionName "1.0"
     }
 
+    def keyStorePath = System.getenv('ANDROID_KEYSTORE_PATH')
+    keyStorePath = keyStorePath == null ? 'C:/KeyStore/' : keyStorePath
+
+    File propsFile = file(keyStorePath + 'keyStoreProperties.txt')
+    def props = new Properties()
+    props.load(new FileInputStream(propsFile))
+
+    def debugConfigName = 'debug'
+    def releaseConfigName = 'release'
+
     signingConfigs {
         debug {
-            storeFile file(String.valueOf(System.getenv('ANDROID_DEBUG_KEYSTORE_PATH')))
-            storePassword String.valueOf(System.getenv('ANDROID_DEBUG_KEYSTORE_PW'))
-            keyAlias String.valueOf(System.getenv('ANDROID_DEBUG_KEY_ALIAS'))
-            keyPassword String.valueOf(System.getenv('ANDROID_DEBUG_KEY_ALIAS_KEY'))
+            storeFile = file(keyStorePath + props[debugConfigName + 'StoreFile'])
+            storePassword = props[debugConfigName + 'StorePassword']
+            keyAlias = props[debugConfigName + 'KeyAlias']
+            keyPassword = props[debugConfigName + 'KeyPassword']
+        }
+
+        release {
+            storeFile = file(keyStorePath + props[releaseConfigName + 'StoreFile'])
+            storePassword = props[releaseConfigName + 'StorePassword']
+            keyAlias = props[releaseConfigName + 'KeyAlias']
+            keyPassword = props[releaseConfigName + 'KeyPassword']
         }
     }
 
@@ -32,6 +49,15 @@ android {
         }
     }
 
+    productFlavors {
+        mock {
+            applicationIdSuffix = ".mock"
+        }
+        prod {
+
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
@@ -39,9 +65,9 @@ android {
 }
 
 final SUPPORT_LIBRARY_VERSION = "24.1.1"
-final DAGGER_VERSION = "2.4"
+final DAGGER_VERSION = "2.6"
 final RETROFIT_VERSION = "2.1.0"
-final FIREBASE_VERSION = "9.2.0"
+final FIREBASE_VERSION = "9.4.0"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -60,6 +86,8 @@ dependencies {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
+
+    compile "com.google.guava:guava:18.0"
     compile "com.squareup.retrofit2:converter-gson:${RETROFIT_VERSION}"
     compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT_VERSION}"
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
@@ -67,7 +95,8 @@ dependencies {
     compile "com.google.firebase:firebase-core:${FIREBASE_VERSION}"
     compile "com.google.firebase:firebase-database:${FIREBASE_VERSION}"
     compile "com.google.firebase:firebase-messaging:${FIREBASE_VERSION}"
-    //    compile "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
+        compile "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
+
     compile 'com.jakewharton:butterknife:8.1.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile 'com.jakewharton.timber:timber:4.1.2'

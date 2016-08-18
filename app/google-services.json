@@ -40,10 +40,48 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "1091763848366-l70vn746lde1e62776uen4qp55k4u9hu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.digital-dispatch.FcmExample"
+              }
+            },
+            {
               "client_id": "1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091763848366:android:29975c23c5507cfc",
+        "android_client_info": {
+          "package_name": "com.cabbage.firetic.mock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMDQvrPiu02F71R_S-9g6rmdX27VDeUFg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
