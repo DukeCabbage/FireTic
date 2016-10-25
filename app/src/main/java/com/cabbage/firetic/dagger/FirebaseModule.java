@@ -1,7 +1,13 @@
 package com.cabbage.firetic.dagger;
 
+import android.content.Context;
+
+import com.cabbage.firetic.BuildConfig;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -13,15 +19,34 @@ import dagger.Provides;
 public class FirebaseModule {
 
     private FirebaseDatabase firebaseDatabase;
-
-    public FirebaseModule(FirebaseDatabase db) {
-        firebaseDatabase = db;
-    }
+    private FirebaseRemoteConfig firebaseRemoteConfig;
+    private FirebaseAnalytics analytics;
 
     @Provides
     @Singleton
     FirebaseDatabase providesDatabase() {
+        if (firebaseDatabase == null) firebaseDatabase = FirebaseDatabase.getInstance();
         return firebaseDatabase;
+    }
+
+    @Provides
+    @Singleton
+    FirebaseRemoteConfig providesRemoteConfig() {
+        if (firebaseRemoteConfig == null) {
+            firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+            FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                    .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                    .build();
+            firebaseRemoteConfig.setConfigSettings(configSettings);
+        }
+        return firebaseRemoteConfig;
+    }
+
+    @Provides
+    @Singleton
+    FirebaseAnalytics providesAnalytics(@Named("application") Context context) {
+        if (analytics == null) analytics = FirebaseAnalytics.getInstance(context);
+        return analytics;
     }
 
     @Provides

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.cabbage.firetic.model.DataManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -33,6 +35,10 @@ public interface AppComponent {
     /** ---------------------------------------------------------------------------------------- */
 
     FirebaseDatabase fireDB();
+
+    FirebaseRemoteConfig fireConfig();
+
+    FirebaseAnalytics fireAnalytics();
 
     @Named("user")
     DatabaseReference getUsersRef();

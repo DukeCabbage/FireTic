@@ -11,11 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cabbage.firetic.R;
+import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.model.User;
 import com.cabbage.firetic.ui.lounge.LoungeActivity;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +33,7 @@ import timber.log.Timber;
 
 public class SignInFragment extends Fragment implements SignInContract.View {
 
+    @BindView(R.id.tv_welcome) TextView tvWelcome;
     @BindView(R.id.et_username) EditText etUsername;
     @BindView(R.id.btn_connect) Button btnConnect;
     private Unbinder unbinder;
@@ -59,6 +68,34 @@ public class SignInFragment extends Fragment implements SignInContract.View {
         View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
         activity = (LoungeActivity) getActivity();
         unbinder = ButterKnife.bind(this, rootView);
+
+        final FirebaseRemoteConfig remoteConfig = MyApplication.component().fireConfig();
+        remoteConfig.fetch(60)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Fetch Succeeded",
+                                    Toast.LENGTH_LONG).show();
+
+                            // Once the config is successfully fetched it must be activated before newly fetched
+                            // values are returned.
+                            remoteConfig.activateFetched();
+                        } else {
+                            Toast.makeText(getActivity(), "Fetch Failed",
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                        String welcomeMessage = remoteConfig.getString("welcome_message");
+                        tvWelcome.setText(welcomeMessage);
+                    }
+                });
+
+        FirebaseDatabase database = MyApplication.component().fireDB();
+        if (database == null) Timber.e("DB null");
+        FirebaseAnalytics analytics = MyApplication.component().fireAnalytics();
+        if (analytics == null) Timber.e("analytics null");
+
         return rootView;
     }
 

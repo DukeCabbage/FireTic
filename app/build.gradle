@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "25"
 
     defaultConfig {
         applicationId "com.cabbage.firetic"
         minSdkVersion 21
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -44,7 +44,8 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -64,10 +65,10 @@ android {
     }
 }
 
-final SUPPORT_LIBRARY_VERSION = "24.1.1"
+final SUPPORT_LIBRARY_VERSION = "25.0.0"
 final DAGGER_VERSION = "2.6"
 final RETROFIT_VERSION = "2.1.0"
-final FIREBASE_VERSION = "9.0.0"
+final FIREBASE_VERSION = "9.8.0"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -92,10 +93,13 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT_VERSION}"
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+
+    // Firebase
     compile "com.google.firebase:firebase-core:${FIREBASE_VERSION}"
     compile "com.google.firebase:firebase-database:${FIREBASE_VERSION}"
     compile "com.google.firebase:firebase-messaging:${FIREBASE_VERSION}"
-        compile "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
+    compile "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
+    compile "com.google.firebase:firebase-config:${FIREBASE_VERSION}"
 
     compile 'com.jakewharton:butterknife:8.1.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'

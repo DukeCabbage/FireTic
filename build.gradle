@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'com.google.gms:google-services:3.0.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
@@ -18,26 +18,6 @@ allprojects {
     repositories {
         jcenter()
     }
-
-//
-//    afterEvaluate { project ->
-//        def propsFile = rootProject.file('keystore.properties')
-//        def configName = 'debug'
-//
-//        if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
-//            def props = new Properties()
-//            props.load(new FileInputStream(propsFile))
-//            android.signingConfigs[configName].storeFile = file(props['storeFile'])
-//            android.signingConfigs[configName].storePassword = props['storePassword']
-//            android.signingConfigs[configName].keyAlias = props['keyAlias']
-//            android.signingConfigs[configName].keyPassword = props['keyPassword']
-//        }
-
-//        if (project.hasProperty("build_signingConfig") && new File(project.build_signingConfig).exists()) {
-//            logger.debug("[SIGNING CONFIG] Applying signing configuration to release builds from: " + project.build_signingConfig);
-//            apply from: project.build_signingConfig;
-//        }
-//    }
 }
 
 task clean(type: Delete) {

@@ -40,7 +40,7 @@ public class LoungeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setUpAppBar();
 
-        DataManager mDataManager = MyApplication.component().getDataManager();
+//        DataManager mDataManager = MyApplication.component().getDataManager();
 //        loggedIn = mDataManager.getActiveUser() != null;
         loggedIn = false;
 
