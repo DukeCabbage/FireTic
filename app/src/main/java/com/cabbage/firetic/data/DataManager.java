@@ -1,10 +1,11 @@
-package com.cabbage.firetic.model;
+package com.cabbage.firetic.data;
 
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 import com.cabbage.firetic.dagger.AppComponent;
 import com.cabbage.firetic.dagger.MyApplication;
+import com.cabbage.firetic.model.Player;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +27,7 @@ public class DataManager {
     DatabaseReference gameRef;
     SharedPreferences sharedPreferences;
 
-    User activeUser;
+    Player activeUser;
 
     public DataManager() {
         AppComponent com = MyApplication.component();
@@ -35,28 +36,28 @@ public class DataManager {
         sharedPreferences = com.getSharedPreferences();
     }
 
-    public Observable<User> signInAs(final String inputUserName) {
+    public Observable<Player> signInAs(final String inputUserName) {
 
-        Observable.OnSubscribe<User> onSubscribe = new Observable.OnSubscribe<User>() {
+        Observable.OnSubscribe<Player> onSubscribe = new Observable.OnSubscribe<Player>() {
             @Override
-            public void call(final Subscriber<? super User> subscriber) {
+            public void call(final Subscriber<? super Player> subscriber) {
                 Query existingUserQuery = userRef.orderByChild("userName").equalTo(inputUserName);
 
                 existingUserQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Timber.d("Child exists: %b", dataSnapshot.exists());
-                        User user;
+                        Player user;
                         if (dataSnapshot.exists()) {
-                            Timber.d("User existed:");
+                            Timber.d("Player existed:");
                             DataSnapshot snap = dataSnapshot.getChildren().iterator().next();
-                            user = snap.getValue(User.class);
+                            user = snap.getValue(Player.class);
                             user.setUserId(snap.getKey());
 
                         } else {
                             Timber.d("Creating new user:");
                             DatabaseReference newUserRef = userRef.push();
-                            user = new User(newUserRef.getKey(), inputUserName);
+                            user = new Player(newUserRef.getKey(), inputUserName);
                             newUserRef.setValue(user);
                         }
 
@@ -78,7 +79,7 @@ public class DataManager {
     }
 
     @Nullable
-    public User getActiveUser() {
+    public Player getActiveUser() {
         if (activeUser == null) {
             retrieveCachedUser();
         }
@@ -92,7 +93,7 @@ public class DataManager {
     }
 
     // TODO: Change access level to private
-    public void saveActiveUser(User user) {
+    public void saveActiveUser(Player user) {
         activeUser = user;
         if (!CACHE_ENABLED)
             return;
@@ -108,7 +109,7 @@ public class DataManager {
         }
         try {
             Gson gson = new Gson();
-            activeUser = gson.fromJson(userStr, User.class);
+            activeUser = gson.fromJson(userStr, Player.class);
         } catch (JsonSyntaxException e) {
             Timber.e(e.getLocalizedMessage());
         }

@@ -9,19 +9,12 @@ import android.widget.TextView;
 
 import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.R;
-import com.cabbage.firetic.model.User;
-import com.cabbage.firetic.network.NepheleService;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Retrofit;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class NotifActivity extends AppCompatActivity {
@@ -40,7 +33,7 @@ public class NotifActivity extends AppCompatActivity {
 //        NepheleService service = fireRetro.create(NepheleService.class);
 //        service.getUsers().subscribeOn(Schedulers.newThread())
 //                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<List<User>>() {
+//                .subscribe(new Subscriber<List<Player>>() {
 //                    @Override
 //                    public void onCompleted() {
 //
@@ -52,8 +45,8 @@ public class NotifActivity extends AppCompatActivity {
 //                    }
 //
 //                    @Override
-//                    public void onNext(List<User> users) {
-//                        Timber.d("User count: " + users.size());
+//                    public void onNext(List<Player> users) {
+//                        Timber.d("Player count: " + users.size());
 //                    }
 //                });
     }

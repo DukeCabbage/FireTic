@@ -4,7 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cabbage.firetic.model.DataManager;
+import com.cabbage.firetic.data.DataManager;
+import com.cabbage.firetic.data.UserAccountManager;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -44,5 +47,11 @@ public class AppModule {
     @Singleton
     DataManager providesDataManager() {
         return new DataManager();
+    }
+
+    @Provides
+    @Singleton
+    UserAccountManager providesUserAccountManager(FirebaseAuth firebaseAuth, FirebaseAnalytics firebaseAnalytics) {
+        return new UserAccountManager(firebaseAuth, firebaseAnalytics);
     }
 }

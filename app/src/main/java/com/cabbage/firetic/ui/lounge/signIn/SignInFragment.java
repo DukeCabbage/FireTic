@@ -1,14 +1,15 @@
 package com.cabbage.firetic.ui.lounge.signIn;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,11 +17,12 @@ import android.widget.Toast;
 
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.dagger.MyApplication;
-import com.cabbage.firetic.model.User;
+import com.cabbage.firetic.model.Player;
 import com.cabbage.firetic.ui.lounge.LoungeActivity;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.Strings;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -35,6 +37,8 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     @BindView(R.id.tv_welcome) TextView tvWelcome;
     @BindView(R.id.et_username) EditText etUsername;
+    @BindView(R.id.et_email) EditText etEmail;
+    @BindView(R.id.et_password) EditText etPassword;
     @BindView(R.id.btn_connect) Button btnConnect;
     private Unbinder unbinder;
     private LoungeActivity activity;
@@ -45,21 +49,24 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     }
 
     @OnClick(R.id.btn_connect)
-    void connectOnClick() {
-        String inputUserName = etUsername.getText().toString();
-        boolean validUserName = !TextUtils.isEmpty(inputUserName);
-
-        if (validUserName) {
-            DialogHelper.showProgressDialog(activity,"Logging in...");
-            mPresenter.signInAs(inputUserName);
-        } else {
-            etUsername.setError("User name can't be empty");
+    void connectOnClick(View v) {
+        String inputEmail = etEmail.getText().toString();
+        if (Strings.isNullOrEmpty(inputEmail)) {
+            etEmail.setError("Can not be empty");
+            return;
         }
-    }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        String inputPassword = etPassword.getText().toString();
+        if (Strings.isNullOrEmpty(inputPassword)) {
+            etPassword.setError("Can not be empty");
+            return;
+        }
+        
+        DialogHelper.showProgressDialog(activity, "Logging in...");
+        mPresenter.loginEmailAndPassword(inputEmail, inputPassword);
+
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Nullable
@@ -70,47 +77,34 @@ public class SignInFragment extends Fragment implements SignInContract.View {
         unbinder = ButterKnife.bind(this, rootView);
 
         final FirebaseRemoteConfig remoteConfig = MyApplication.component().fireConfig();
-        remoteConfig.fetch(60)
+        remoteConfig.fetch()
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Fetch Succeeded",
-                                    Toast.LENGTH_LONG).show();
-
-                            // Once the config is successfully fetched it must be activated before newly fetched
-                            // values are returned.
+                            Toast.makeText(getActivity(), "Fetch Succeeded", Toast.LENGTH_LONG).show();
                             remoteConfig.activateFetched();
                         } else {
-                            Toast.makeText(getActivity(), "Fetch Failed",
-                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Fetch Failed", Toast.LENGTH_LONG).show();
                         }
-
                         String welcomeMessage = remoteConfig.getString("welcome_message");
                         tvWelcome.setText(welcomeMessage);
                     }
                 });
 
-        FirebaseDatabase database = MyApplication.component().fireDB();
-        if (database == null) Timber.e("DB null");
-        FirebaseAnalytics analytics = MyApplication.component().fireAnalytics();
-        if (analytics == null) Timber.e("analytics null");
-
         return rootView;
     }
 
     @Override
-    public void onResume() {
-        Timber.v("onResume");
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         mPresenter.start();
     }
 
     @Override
-    public void onPause() {
-        Timber.v("onPause");
-        super.onPause();
-        mPresenter.end();
+    public void onStop() {
+        super.onStop();
+        mPresenter.stop();
     }
 
     @Override
@@ -121,19 +115,21 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     }
 
     @Override
-    public void signInSuccess(@NonNull User user) {
-        Timber.w("TODO: Sign in success");
+    public void signInSuccess(@NonNull Player player) {
         DialogHelper.dismissProgressDialog();
-
         if (getView() != null) {
-            Snackbar.make(getView(), String.format("Welcome, %s", user.getUserName()), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(getView(), String.format("Welcome, %s", player.getUserName()), Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void signInFail(@Nullable String errMsg) {
-        Timber.w("TODO: Sign in fail");
         DialogHelper.dismissProgressDialog();
+
+        if (getView() != null) {
+            errMsg = Strings.isNullOrEmpty(errMsg) ? "Sign in fail" : errMsg;
+            Snackbar.make(getView(), errMsg, Snackbar.LENGTH_LONG).setDuration(10000).show();
+        }
     }
 
     @Override

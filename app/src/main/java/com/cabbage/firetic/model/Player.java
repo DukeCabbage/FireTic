@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class User implements Serializable {
+public class Player implements Serializable {
 
     private String userId;
     private String userName;
     private List<String> matchIdList;
 
-    public User() {
+    public Player() {
     }
 
-    public User(String userId, String userName) {
+    public Player(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;
         this.matchIdList = new ArrayList<>();

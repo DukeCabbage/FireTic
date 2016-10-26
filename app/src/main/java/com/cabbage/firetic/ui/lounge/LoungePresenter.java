@@ -3,7 +3,7 @@
 //import android.support.annotation.NonNull;
 //
 //import com.cabbage.firetic.model.DataManager;
-//import com.cabbage.firetic.model.User;
+//import com.cabbage.firetic.model.Player;
 //
 //import rx.Subscription;
 //import rx.functions.Action1;
@@ -37,10 +37,10 @@
 //        mView.logout();
 //    }
 //
-//    protected Action1<User> signInSuccessPipe() {
-//        return new Action1<User>() {
+//    protected Action1<Player> signInSuccessPipe() {
+//        return new Action1<Player>() {
 //            @Override
-//            public void call(User user) {
+//            public void call(Player user) {
 //                Timber.d(user.getUserName());
 //                mView.loginSuccess(user);
 //            }

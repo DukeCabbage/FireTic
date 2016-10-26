@@ -16,7 +16,7 @@ public class Game {
     private int[] localWinner;
     private int globalWinner;
 
-    public Game(User player1) {
+    public Game(Player player1) {
         this.player1Id = player1.getUserId();
         this.player1Name = player1.getUserName();
         this.currentPlayer = Constants.Player1Token;

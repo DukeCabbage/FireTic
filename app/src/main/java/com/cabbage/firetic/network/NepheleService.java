@@ -1,6 +1,6 @@
 package com.cabbage.firetic.network;
 
-import com.cabbage.firetic.model.User;
+import com.cabbage.firetic.model.Player;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import rx.Observable;
 public interface NepheleService {
 
     @GET("users.json")
-    Observable<List<User>> getUsers();
+    Observable<List<Player>> getUsers();
 }

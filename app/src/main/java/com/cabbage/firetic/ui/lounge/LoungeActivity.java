@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.dagger.MyApplication;
-import com.cabbage.firetic.model.DataManager;
 import com.cabbage.firetic.ui.lounge.signIn.DaggerSignInComponent;
 import com.cabbage.firetic.ui.lounge.signIn.SignInComponent;
 import com.cabbage.firetic.ui.lounge.signIn.SignInFragment;
@@ -40,8 +39,6 @@ public class LoungeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setUpAppBar();
 
-//        DataManager mDataManager = MyApplication.component().getDataManager();
-//        loggedIn = mDataManager.getActiveUser() != null;
         loggedIn = false;
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content);

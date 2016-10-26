@@ -12,7 +12,7 @@
 //import com.cabbage.firetic.R;
 //import com.cabbage.firetic.dagger.MyApplication;
 //import com.cabbage.firetic.model.DataManager;
-//import com.cabbage.firetic.model.User;
+//import com.cabbage.firetic.model.Player;
 //import com.cabbage.firetic.ui.base.BaseActivity;
 //import com.cabbage.firetic.ui.lounge.signIn.SignInFragment;
 //import com.cabbage.firetic.ui.uiUtils.DialogHelper;
@@ -68,7 +68,7 @@
 //    }
 //
 //    private void checkIfSignedIn() {
-//        User activeUser = mDataManager.getActiveUser();
+//        Player activeUser = mDataManager.getActivePlayer();
 //        if (activeUser != null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .replace(R.id.content, loungeFragment, "loungeFragment")
@@ -114,7 +114,7 @@
 //
 //    /**-----------------------------------------------------------------------------------*/
 //    @Override
-//    public void loginSuccess(@NonNull User user) {
+//    public void loginSuccess(@NonNull Player user) {
 //        String message = String.format("Login as: %s", user.getUserName());
 //        Timber.i(message);
 //        Toast.makeText(this, message, Toast.LENGTH_LONG).show();

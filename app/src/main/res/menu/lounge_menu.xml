@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/revoke_user"
-          android:title="Revoke user"
+          android:title="Revoke player"
           android:visible="true"
           app:showAsAction="never" />
 </menu>

@@ -1,21 +1,16 @@
 package com.cabbage.firetic.dagger;
 
-import com.cabbage.firetic.model.User;
-import com.facebook.stetho.common.ArrayListAccumulator;
+import com.cabbage.firetic.model.Player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,10 +33,10 @@ public class NetworkModule {
     @Provides
     @Singleton
     Retrofit provideRetrofit(OkHttpClient okHttpClient) {
-        JsonDeserializer<List<User>> deserializer = new JsonDeserializer<List<User>>() {
+        JsonDeserializer<List<Player>> deserializer = new JsonDeserializer<List<Player>>() {
             @Override
-            public List<User> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                List<User> results = new ArrayList<>();
+            public List<Player> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                List<Player> results = new ArrayList<>();
 
                 JsonObject object = json.getAsJsonObject();
                 Set<Map.Entry<String, JsonElement>> set = object.entrySet();
@@ -50,9 +45,9 @@ public class NetworkModule {
                     JsonObject userObj = item.getValue().getAsJsonObject();
 
                     Gson gson = new Gson();
-                    User user = gson.fromJson(userObj, User.class);
-                    user.setUserId(userId);
-                    results.add(user);
+                    Player player = gson.fromJson(userObj, Player.class);
+                    player.setUserId(userId);
+                    results.add(player);
                 }
                 return results;
             }

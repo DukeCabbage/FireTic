@@ -151,7 +151,7 @@ public class Gameboard extends RelativeLayout
 
     // Called by sectors, returned value dictates what sector should draw, or draw at all
     int onUserClick(int boardIndex, int gridIndex) {
-        Timber.d("User picked (%d, %d)", boardIndex, gridIndex);
+        Timber.d("Player picked (%d, %d)", boardIndex, gridIndex);
         if (currentlyUnlocked != Constants.NotChosen && currentlyUnlocked != boardIndex) {
             // This board is locked
             Timber.d("This grid is locked");

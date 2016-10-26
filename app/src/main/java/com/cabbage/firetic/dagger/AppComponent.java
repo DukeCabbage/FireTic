@@ -3,8 +3,10 @@ package com.cabbage.firetic.dagger;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cabbage.firetic.model.DataManager;
+import com.cabbage.firetic.data.DataManager;
+import com.cabbage.firetic.data.UserAccountManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -23,7 +25,9 @@ import retrofit2.Retrofit;
 })
 public interface AppComponent {
 
-    /** ---------------------------------------------------------------------------------------- */
+    /**
+     * ----------------------------------------------------------------------------------------
+     */
 
     @Named("application")
     Context appContext();
@@ -32,13 +36,19 @@ public interface AppComponent {
 
     DataManager getDataManager();
 
-    /** ---------------------------------------------------------------------------------------- */
+    UserAccountManager getUserAccountManager();
+
+    /**
+     * ----------------------------------------------------------------------------------------
+     */
 
     FirebaseDatabase fireDB();
 
     FirebaseRemoteConfig fireConfig();
 
-    FirebaseAnalytics fireAnalytics();
+//    FirebaseAnalytics fireAnalytics();
+
+//    FirebaseAuth fireAuth();
 
     @Named("user")
     DatabaseReference getUsersRef();
@@ -46,7 +56,9 @@ public interface AppComponent {
     @Named("game")
     DatabaseReference getGamesRef();
 
-    /** ---------------------------------------------------------------------------------------- */
+    /**
+     * ----------------------------------------------------------------------------------------
+     */
 
     Retrofit getRetrofit();
 }

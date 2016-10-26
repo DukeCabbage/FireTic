@@ -32,7 +32,7 @@ public class MyAnimatorListener implements Animator.AnimatorListener {
         View view = wfTargetView.get();
         if (view != null) {
             if (logEnabled) {
-            Timber.i("Anim end with: ");
+            Timber.i("Anim stop with: ");
                 printAttributes(view);
             }
         }
