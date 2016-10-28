@@ -2,6 +2,7 @@ package com.cabbage.firetic.ui.gameboard;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,8 @@ import android.view.ViewPropertyAnimator;
 
 import com.cabbage.firetic.BuildConfig;
 import com.cabbage.firetic.R;
+import com.cabbage.firetic.dagger.MyApplication;
+import com.cabbage.firetic.ui.login.LoginActivity;
 import com.cabbage.firetic.ui.uiUtils.Constants;
 import com.cabbage.firetic.ui.uiUtils.MyAnimatorListener;
 
@@ -44,6 +47,7 @@ public class GameboardActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.i("onCreate");
         setContentView(R.layout.activity_gameboard);
         ButterKnife.bind(this);
         setUpAppBar();
@@ -54,7 +58,7 @@ public class GameboardActivity extends AppCompatActivity
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             throw new RuntimeException("Can not find toolbar");
         }
@@ -83,6 +87,12 @@ public class GameboardActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            case R.id.revoke_user:
+                MyApplication.component().getUserAccountManager().signOut();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
             case R.id.zoom_in:
 //                sector.focusOnSector(true);
                 return true;
@@ -169,5 +179,22 @@ public class GameboardActivity extends AppCompatActivity
                 dialogInterface.dismiss();
             }
         }).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Timber.i("onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Timber.i("onDestroy");
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

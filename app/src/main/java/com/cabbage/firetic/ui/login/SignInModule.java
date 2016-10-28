@@ -1,4 +1,4 @@
-package com.cabbage.firetic.ui.lounge.signIn;
+package com.cabbage.firetic.ui.login;
 
 import dagger.Module;
 import dagger.Provides;
@@ -8,7 +8,7 @@ public class SignInModule {
 
     private final SignInContract.View mView;
 
-    public SignInModule(SignInContract.View view) {
+    SignInModule(SignInContract.View view) {
         mView = view;
     }
 

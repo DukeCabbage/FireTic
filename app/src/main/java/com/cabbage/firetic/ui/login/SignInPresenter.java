@@ -1,12 +1,18 @@
-package com.cabbage.firetic.ui.lounge.signIn;
+package com.cabbage.firetic.ui.login;
 
 import android.support.annotation.NonNull;
 
 import com.cabbage.firetic.data.UserAccountManager;
 import com.cabbage.firetic.model.Player;
 import com.cabbage.firetic.utility.RxUtils;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import javax.inject.Inject;
 
@@ -34,6 +40,20 @@ public class SignInPresenter extends SignInContract.Presenter {
         } else {
             signUp(email, password);
         }
+    }
+
+    @Override
+    void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mUserAccountManager.signInWithCredential(credential);
+
+    }
+
+    @Override
+    void firebaseAuthWithFacebook(LoginResult loginResult) {
+        AccessToken token = loginResult.getAccessToken();
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mUserAccountManager.signInWithCredential(credential);
     }
 
     private void signUp(@NonNull final String email, @NonNull final String password) {

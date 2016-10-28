@@ -29,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBMDQvrPiu02F71R_S-9g6rmdX27VDeUFg"
+          "current_key": "AIzaSyA3JeazzwCfSSWWcGcCMpjH25uZmD-q_6A"
         }
       ],
       "services": {
@@ -66,13 +66,21 @@
       },
       "oauth_client": [
         {
+          "client_id": "1091763848366-o1ih76q7j0bcrn3rmp4ipi4uigl3kpam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cabbage.firetic.mock",
+            "certificate_hash": "4482C2CE081A743C3F1DD8B4B6CEC9183C9273F1"
+          }
+        },
+        {
           "client_id": "1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBMDQvrPiu02F71R_S-9g6rmdX27VDeUFg"
+          "current_key": "AIzaSyA3JeazzwCfSSWWcGcCMpjH25uZmD-q_6A"
         }
       ],
       "services": {

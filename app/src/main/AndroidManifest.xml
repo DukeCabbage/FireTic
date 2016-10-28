@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.cabbage.firetic"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.cabbage.firetic">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -15,16 +16,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
         <!-- Activities -->
         <activity
             android:name=".ui.gameboard.GameboardActivity"
-            android:parentActivityName=".ui.lounge.LoungeActivity"
+            android:parentActivityName=".ui.login.LoginActivity"
             android:screenOrientation="portrait">
 
         </activity>
 
         <activity
-            android:name=".ui.lounge.LoungeActivity"
+            android:name=".ui.login.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -37,9 +42,13 @@
         </activity>
 
         <activity
-            android:name=".ui.NotifActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:replace="android:theme"/>
+
         <!-- Services -->
 
         <service
