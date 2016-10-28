@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +23,6 @@ import com.cabbage.firetic.R;
 import com.cabbage.firetic.dagger.MyApplication;
 import com.cabbage.firetic.model.Player;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -43,9 +41,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.base.Strings;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import butterknife.BindView;
@@ -148,7 +143,7 @@ public class SignInFragment extends Fragment
                 .build();
 
         signInButton.setSize(SignInButton.SIZE_WIDE);
-
+        
         LoginManager.getInstance().logOut();
 
         callbackManager = CallbackManager.Factory.create();
