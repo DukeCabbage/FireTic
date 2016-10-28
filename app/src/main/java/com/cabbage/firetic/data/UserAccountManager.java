@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,6 +50,10 @@ public class UserAccountManager {
     @Nullable
     public FirebaseUser getFirebaseUser() {
         return mAuth.getCurrentUser();
+    }
+
+    public boolean isLoggedIn() {
+        return getFirebaseUser() != null;
     }
 
     public Observable<FirebaseUser> signUpEmailAndPassword(@NonNull final String email, @NonNull final String password) {
@@ -130,6 +135,26 @@ public class UserAccountManager {
                         });
             }
         });
+    }
+
+    public void signInWithCredential(AuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Timber.d("signInWithCredential:onComplete: %b", task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                    }
+                });
     }
 
     public void signOut() {

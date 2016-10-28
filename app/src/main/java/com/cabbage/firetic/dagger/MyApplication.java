@@ -3,6 +3,8 @@ package com.cabbage.firetic.dagger;
 import android.app.Application;
 
 import com.cabbage.firetic.BuildConfig;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
 
 import timber.log.Timber;
@@ -28,6 +30,9 @@ public class MyApplication extends Application {
             Timber.plant(new Timber.DebugTree());
             Stetho.initializeWithDefaults(this);
         }
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         initAppComponent();
     }
