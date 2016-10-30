@@ -1,18 +1,12 @@
 package com.cabbage.firetic.data;
 
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.cabbage.firetic.utility.RxUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -22,7 +16,6 @@ import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
 import timber.log.Timber;
 
-@SuppressWarnings("unused")
 public class UserAccountManager {
 
     @NonNull private FirebaseAuth mAuth;
@@ -34,12 +27,9 @@ public class UserAccountManager {
         this.mAnalytics = firebaseAnalytics;
         this.mAuthStateChangePublisher = PublishSubject.create();
 
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth != mAuth) throw new RuntimeException();
-                mAuthStateChangePublisher.onNext(mAuth.getCurrentUser());
-            }
+        mAuth.addAuthStateListener(firebaseAuth1 -> {
+            if (firebaseAuth1 != mAuth) throw new RuntimeException();
+            mAuthStateChangePublisher.onNext(mAuth.getCurrentUser());
         });
     }
 
@@ -63,35 +53,26 @@ public class UserAccountManager {
             public void call(final Subscriber<? super FirebaseUser> subscriber) {
                 RxUtils.printIsMainThread("sign up on subscribe");
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                RxUtils.printIsMainThread("sign up success");
-                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                if (firebaseUser == null) {
-                                    subscriber.onError(new RuntimeException("No result"));
-                                } else {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, firebaseUser.getUid());
-                                    mAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
+                        .addOnSuccessListener(authResult -> {
+                            RxUtils.printIsMainThread("sign up success");
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            if (firebaseUser == null) {
+                                subscriber.onError(new RuntimeException("No result"));
+                            } else {
+                                Bundle bundle = new Bundle();
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, firebaseUser.getUid());
+                                mAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
-                                    subscriber.onNext(firebaseUser);
-                                }
+                                subscriber.onNext(firebaseUser);
                             }
                         })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                RxUtils.printIsMainThread("sign up fail");
-                                subscriber.onError(e);
-                            }
+                        .addOnFailureListener(e -> {
+                            RxUtils.printIsMainThread("sign up fail");
+                            subscriber.onError(e);
                         })
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                RxUtils.printIsMainThread("sign up complete");
-                                subscriber.onCompleted();
-                            }
+                        .addOnCompleteListener(task -> {
+                            RxUtils.printIsMainThread("sign up complete");
+                            subscriber.onCompleted();
                         });
             }
         });
@@ -103,35 +84,26 @@ public class UserAccountManager {
             public void call(final Subscriber<? super FirebaseUser> subscriber) {
                 RxUtils.printIsMainThread("sign in on subscribe");
                 mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                RxUtils.printIsMainThread("sign in success");
-                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                if (firebaseUser == null) {
-                                    subscriber.onError(new RuntimeException("No result"));
-                                } else {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, firebaseUser.getUid());
-                                    mAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
+                        .addOnSuccessListener(authResult -> {
+                            RxUtils.printIsMainThread("sign in success");
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            if (firebaseUser == null) {
+                                subscriber.onError(new RuntimeException("No result"));
+                            } else {
+                                Bundle bundle = new Bundle();
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, firebaseUser.getUid());
+                                mAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
 
-                                    subscriber.onNext(firebaseUser);
-                                }
+                                subscriber.onNext(firebaseUser);
                             }
                         })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                RxUtils.printIsMainThread("sign in fail");
-                                subscriber.onError(e);
-                            }
+                        .addOnFailureListener(e -> {
+                            RxUtils.printIsMainThread("sign in fail");
+                            subscriber.onError(e);
                         })
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                RxUtils.printIsMainThread("sign in complete");
-                                subscriber.onCompleted();
-                            }
+                        .addOnCompleteListener(task -> {
+                            RxUtils.printIsMainThread("sign in complete");
+                            subscriber.onCompleted();
                         });
             }
         });
@@ -139,21 +111,13 @@ public class UserAccountManager {
 
     public void signInWithCredential(AuthCredential credential) {
         mAuth.signInWithCredential(credential)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.d("signInWithCredential:onComplete: %b", task.isSuccessful());
+                .addOnFailureListener(e -> e.printStackTrace())
+                .addOnCompleteListener(task -> {
+                    Timber.d("signInWithCredential:onComplete: %b", task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                    }
+                    // If sign in fails, display a message to the user. If sign in succeeds
+                    // the auth state listener will be notified and logic to handle the
+                    // signed in user can be handled in the listener.
                 });
     }
 

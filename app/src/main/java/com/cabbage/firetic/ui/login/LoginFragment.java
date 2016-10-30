@@ -26,6 +26,7 @@ import com.cabbage.firetic.ui.uiUtils.DialogHelper;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -36,10 +37,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.common.base.Strings;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
@@ -49,11 +46,11 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
-public class SignInFragment extends Fragment
-        implements SignInContract.View, GoogleApiClient.OnConnectionFailedListener {
+public class LoginFragment extends Fragment
+        implements LoginContract.View, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 9001;
-    private static final int RC_FACEBOOK = 64206;
+    private static final int RC_FACEBOOK = CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode();
 
     @BindView(R.id.tv_welcome) TextView tvWelcome;
     @BindView(R.id.et_username) EditText etUsername;
@@ -63,13 +60,13 @@ public class SignInFragment extends Fragment
     @BindView(R.id.sign_in_button) SignInButton signInButton;
     @BindView(R.id.login_button) LoginButton loginButton;
     private Unbinder unbinder;
-    private LoginActivity activity;
-    private SignInContract.Presenter mPresenter;
+//    private LoginActivity activity;
+    private LoginContract.Presenter mPresenter;
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager callbackManager;
 
-    public static SignInFragment newInstance() {
-        return new SignInFragment();
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
     @OnClick(R.id.btn_connect)
@@ -86,10 +83,10 @@ public class SignInFragment extends Fragment
             return;
         }
 
-        DialogHelper.showProgressDialog(activity, "Logging in...");
+        DialogHelper.showProgressDialog(getActivity(), "Logging in...");
         mPresenter.loginEmailAndPassword(inputEmail, inputPassword);
 
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
@@ -108,24 +105,21 @@ public class SignInFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
-        activity = (LoginActivity) getActivity();
+        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+//        activity = (LoginActivity) getActivity();
         unbinder = ButterKnife.bind(this, rootView);
 
         final FirebaseRemoteConfig remoteConfig = MyApplication.component().fireConfig();
         remoteConfig.fetch()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Fetch Succeeded", Toast.LENGTH_SHORT).show();
-                            remoteConfig.activateFetched();
-                        } else {
-                            Toast.makeText(getActivity(), "Fetch Failed", Toast.LENGTH_SHORT).show();
-                        }
-                        String welcomeMessage = remoteConfig.getString("welcome_message");
-                        tvWelcome.setText(welcomeMessage);
+                .addOnCompleteListener(getActivity(), task -> {
+                    if (task.isSuccessful()) {
+//                            Toast.makeText(getActivity(), "Fetch Succeeded", Toast.LENGTH_SHORT).show();
+                        remoteConfig.activateFetched();
+                    } else {
+                        Toast.makeText(getActivity(), "Fetch Failed", Toast.LENGTH_SHORT).show();
                     }
+                    String welcomeMessage = remoteConfig.getString("welcome_message");
+                    tvWelcome.setText(welcomeMessage);
                 });
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -141,8 +135,6 @@ public class SignInFragment extends Fragment
                 .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-        signInButton.setSize(SignInButton.SIZE_WIDE);
         
         LoginManager.getInstance().logOut();
 
@@ -170,6 +162,8 @@ public class SignInFragment extends Fragment
             }
         });
 
+        loginButton.setOnClickListener(view -> Toast.makeText(getActivity(), "External click listener", Toast.LENGTH_SHORT).show());
+
         return rootView;
     }
 
@@ -193,14 +187,14 @@ public class SignInFragment extends Fragment
     }
 
     @Override
-    public void signInSuccess(@NonNull Player player) {
+    public void loginSuccess(@NonNull Player player) {
         DialogHelper.dismissProgressDialog();
         LoginActivity loginActivity = (LoginActivity) getActivity();
         loginActivity.signInSuccess();
     }
 
     @Override
-    public void signInFail(@Nullable String errMsg) {
+    public void loginFail(@Nullable String errMsg) {
         DialogHelper.dismissProgressDialog();
 
         if (getView() != null) {
@@ -210,13 +204,13 @@ public class SignInFragment extends Fragment
     }
 
     @Override
-    public void setPresenter(SignInContract.Presenter presenter) {
+    public void setPresenter(LoginContract.Presenter presenter) {
         this.mPresenter = presenter;
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        signInFail(connectionResult.getErrorMessage());
+        loginFail(connectionResult.getErrorMessage());
     }
 
     @Override
@@ -241,7 +235,7 @@ public class SignInFragment extends Fragment
             GoogleSignInAccount acct = result.getSignInAccount();
             mPresenter.firebaseAuthWithGoogle(acct);
         } else {
-            signInFail(result.getStatus().getStatusMessage());
+            loginFail(result.getStatus().getStatusMessage());
         }
     }
 
@@ -256,12 +250,7 @@ public class SignInFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.revoke_user:
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                Timber.d(status.getStatusMessage());
-                            }
-                        });
+                        status -> Timber.d(status.getStatusMessage()));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

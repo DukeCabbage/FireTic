@@ -9,15 +9,19 @@ import com.cabbage.firetic.utility.BasePresenter;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
-public interface SignInContract {
+public interface LoginContract {
 
     interface View extends BaseView<Presenter> {
-        void signInSuccess(@NonNull Player player);
+        void loginSuccess(@NonNull Player player);
 
-        void signInFail(@Nullable String errMsg);
+        void loginFail(@Nullable String errMsg);
     }
 
-    abstract class Presenter extends BasePresenter {
+    abstract class Presenter extends BasePresenter<View> {
+        Presenter(@NonNull View mvpView) {
+            super(mvpView);
+        }
+
         abstract void loginEmailAndPassword(@NonNull String email, @NonNull String password);
 
         abstract void firebaseAuthWithGoogle(GoogleSignInAccount acct);
