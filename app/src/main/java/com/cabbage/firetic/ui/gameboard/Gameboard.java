@@ -1,8 +1,6 @@
 package com.cabbage.firetic.ui.gameboard;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -234,6 +232,7 @@ public class Gameboard extends RelativeLayout
 
     interface Callback {
         void userClicked(int index, int player);
+
         void gameEnded(int winner);
     }
 }

@@ -1,7 +1,23 @@
 <resources>
-    <string name="app_name">FireTic</string>
-    <string name="title_sign_up">Create an account</string>
+    <string name="app_name" translatable="false">FireTic</string>
 
-    <string name="web_client_id">1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com</string>
-    <string name="facebook_app_id">623894547771268</string>
+    <string name="web_client_id" translatable="false">1091763848366-surd2jbalfa9c2k6ll6a3ob3un7am2r9.apps.googleusercontent.com</string>
+    <string name="facebook_app_id" translatable="false">623894547771268</string>
+
+    <string name="dialog_msg_login">Logging in…</string>
+
+    <string name="default_welcome">Welcome</string>
+    <string name="login_with">Login with</string>
+    <string name="google">Sign in</string>
+    <string name="facebook">Facebook</string>
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_password">Password</string>
+
+    <string name="create_account">Create an account</string>
+    <string name="login">Login</string>
+
+    <string name="sign_up_hint_user_name">User name</string>
+    <string name="sign_up_hint_email">Email</string>
+    <string name="sign_up_hint_password">Password</string>
+    <string name="sign_up_hint_repeat_password">Repeat password</string>
 </resources>

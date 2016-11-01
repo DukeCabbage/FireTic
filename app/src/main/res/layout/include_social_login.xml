@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              tools:showIn="@layout/fragment_login">
+
+    <!--<com.google.android.gms.common.SignInButton-->
+        <!--android:id="@+id/btn_google"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="44dp"-->
+        <!--android:layout_weight="1"/>-->
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_google"
+        style="@style/LoginButton"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp">
+
+            <ImageView
+                style="@style/LoginButtonIcon"
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/ic_new_google_favicon"
+                tools:src="@drawable/ic_new_google_favicon"/>
+
+            <TextView
+                style="@style/LoginButtonText"
+                android:text="@string/google"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp"/>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/btn_facebook"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_facebook_proxy"
+        style="@style/LoginButton"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@color/facebook"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp">
+
+            <ImageView
+                style="@style/LoginButtonIcon"
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/ic_facebook"
+                tools:src="@drawable/ic_facebook"/>
+
+            <TextView
+                style="@style/LoginButtonText"
+                android:text="@string/facebook"
+                android:textColor="@color/white_smoke"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

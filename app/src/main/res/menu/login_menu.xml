@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/revoke_user"
-          android:title="Revoke player"
+    <item android:id="@+id/revoke_google"
+          android:title="Revoke google"
+          android:visible="true"
+          app:showAsAction="never" />
+
+    <item android:id="@+id/revoke_facebook"
+          android:title="Revoke facebook"
           android:visible="true"
           app:showAsAction="never" />
 </menu>

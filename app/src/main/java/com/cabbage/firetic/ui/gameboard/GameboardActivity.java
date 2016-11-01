@@ -1,7 +1,6 @@
 package com.cabbage.firetic.ui.gameboard;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -14,13 +13,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.widget.TextView;
 
 import com.cabbage.firetic.BuildConfig;
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.dagger.MyApplication;
+import com.cabbage.firetic.data.UserAccountManager;
 import com.cabbage.firetic.ui.login.LoginActivity;
 import com.cabbage.firetic.ui.uiUtils.Constants;
 import com.cabbage.firetic.ui.uiUtils.MyAnimatorListener;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.lang.ref.WeakReference;
 
@@ -35,6 +37,8 @@ public class GameboardActivity extends AppCompatActivity
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.gameboard) Gameboard mGameboard;
     @BindView(R.id.barContainer) View barContainer;
+    @BindView(R.id.tv_player1_name) TextView tvPlayer1Name;
+    @BindView(R.id.tv_player2_name) TextView tvPlayer2Name;
 
     private float playerBarShift = 180; // Default value, overridden in onStart
 
@@ -52,13 +56,21 @@ public class GameboardActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setUpAppBar();
         mGameboard.setCallback(this);
+
+        UserAccountManager userAccountManager = MyApplication.component().getUserAccountManager();
+        FirebaseUser user = userAccountManager.getFirebaseUser();
+        if (user == null) {
+            throw new RuntimeException();
+        } else {
+            String name = user.getDisplayName();
+            tvPlayer1Name.setText(name);
+        }
     }
 
     private void setUpAppBar() {
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             throw new RuntimeException("Can not find toolbar");
         }
@@ -138,7 +150,7 @@ public class GameboardActivity extends AppCompatActivity
 
     /**
      * Gameboard
-    */
+     */
 
     public void refreshBoard(int[] localWinners, int[] moves) {
         if (BuildConfig.DEBUG && moves.length != Constants.BoardCount * Constants.GridCount)
@@ -157,7 +169,7 @@ public class GameboardActivity extends AppCompatActivity
         }
 
 
-        boolean success =  mGameboard.placeMove(boardIndex, gridIndex, player);
+        boolean success = mGameboard.placeMove(boardIndex, gridIndex, player);
         if (success)
             Timber.d("Successfully placed a move at (%d, %d), player %d", boardIndex, gridIndex, player);
         else
@@ -173,12 +185,9 @@ public class GameboardActivity extends AppCompatActivity
     public void gameEnded(int winner) {
         toggleUserIndicator(winner, true);
 
-        new AlertDialog.Builder(this).setMessage("Game over").setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
+        new AlertDialog.Builder(this)
+                .setMessage("Game over")
+                .setNegativeButton("Dismiss", (dialogInterface, i) -> dialogInterface.dismiss()).show();
     }
 
     @Override

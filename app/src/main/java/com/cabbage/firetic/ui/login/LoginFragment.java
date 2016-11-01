@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,30 +14,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cabbage.firetic.R;
 import com.cabbage.firetic.dagger.MyApplication;
-import com.cabbage.firetic.model.Player;
+import com.cabbage.firetic.ui.signup.SignUpActivity;
 import com.cabbage.firetic.ui.uiUtils.DialogHelper;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.internal.CallbackManagerImpl;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.common.base.Strings;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import butterknife.BindView;
@@ -46,31 +39,45 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
-public class LoginFragment extends Fragment
-        implements LoginContract.View, GoogleApiClient.OnConnectionFailedListener {
+public class LoginFragment extends AbstractLoginFragment {
 
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_FACEBOOK = CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode();
 
     @BindView(R.id.tv_welcome) TextView tvWelcome;
-    @BindView(R.id.et_username) EditText etUsername;
     @BindView(R.id.et_email) EditText etEmail;
     @BindView(R.id.et_password) EditText etPassword;
-    @BindView(R.id.btn_connect) Button btnConnect;
-    @BindView(R.id.sign_in_button) SignInButton signInButton;
-    @BindView(R.id.login_button) LoginButton loginButton;
+    @BindView(R.id.btn_facebook) LoginButton btnFacebook;
+
     private Unbinder unbinder;
-//    private LoginActivity activity;
     private LoginContract.Presenter mPresenter;
-    private GoogleApiClient mGoogleApiClient;
-    private CallbackManager callbackManager;
 
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
 
-    @OnClick(R.id.btn_connect)
-    void connectOnClick(View v) {
+
+    @OnClick(R.id.btn_google)
+    void googleSignIn() {
+        DialogHelper.showProgressDialog(getActivity(), R.string.dialog_msg_login);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @OnClick(R.id.btn_facebook_proxy)
+    void faceBookOnClick() {
+        DialogHelper.showProgressDialog(getActivity(), R.string.dialog_msg_login);
+        btnFacebook.performClick();
+    }
+
+    @OnClick(R.id.btn_sign_up)
+    void signUpOnClick() {
+        Intent intent = new Intent(getActivity(), SignUpActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_login)
+    void loginOnClick(View v) {
         String inputEmail = etEmail.getText().toString();
         if (Strings.isNullOrEmpty(inputEmail)) {
             etEmail.setError("Can not be empty");
@@ -83,17 +90,11 @@ public class LoginFragment extends Fragment
             return;
         }
 
-        DialogHelper.showProgressDialog(getActivity(), "Logging in...");
+        DialogHelper.showProgressDialog(getActivity(), R.string.dialog_msg_login);
         mPresenter.loginEmailAndPassword(inputEmail, inputPassword);
 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-    }
-
-    @OnClick(R.id.sign_in_button)
-    void googleSignIn(View v) {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -106,46 +107,19 @@ public class LoginFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-//        activity = (LoginActivity) getActivity();
         unbinder = ButterKnife.bind(this, rootView);
 
         final FirebaseRemoteConfig remoteConfig = MyApplication.component().fireConfig();
+        tvWelcome.setText(R.string.default_welcome);
         remoteConfig.fetch()
                 .addOnCompleteListener(getActivity(), task -> {
-                    if (task.isSuccessful()) {
-//                            Toast.makeText(getActivity(), "Fetch Succeeded", Toast.LENGTH_SHORT).show();
-                        remoteConfig.activateFetched();
-                    } else {
-                        Toast.makeText(getActivity(), "Fetch Failed", Toast.LENGTH_SHORT).show();
-                    }
+                    if (task.isSuccessful()) remoteConfig.activateFetched();
                     String welcomeMessage = remoteConfig.getString("welcome_message");
                     tvWelcome.setText(welcomeMessage);
                 });
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
-                .requestEmail()
-                .build();
-
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        
-        LoginManager.getInstance().logOut();
-
-        callbackManager = CallbackManager.Factory.create();
-        loginButton.setReadPermissions("email");
-        // If using in a fragment
-        loginButton.setFragment(this);
-        // Other app specific specialization
-
-        // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        setUpGoogleLogin();
+        setUpFacebookLogin(btnFacebook, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 mPresenter.firebaseAuthWithFacebook(loginResult);
@@ -153,16 +127,14 @@ public class LoginFragment extends Fragment
 
             @Override
             public void onCancel() {
-                Timber.w("onCancel");
+                loginFail("");
             }
 
             @Override
-            public void onError(FacebookException exception) {
-                exception.printStackTrace();
+            public void onError(FacebookException error) {
+                error.printStackTrace();
             }
         });
-
-        loginButton.setOnClickListener(view -> Toast.makeText(getActivity(), "External click listener", Toast.LENGTH_SHORT).show());
 
         return rootView;
     }
@@ -187,8 +159,9 @@ public class LoginFragment extends Fragment
     }
 
     @Override
-    public void loginSuccess(@NonNull Player player) {
+    public void loginSuccess(@NonNull FirebaseUser firebaseUser) {
         DialogHelper.dismissProgressDialog();
+        Timber.d("Sign in as: %s", firebaseUser.getDisplayName());
         LoginActivity loginActivity = (LoginActivity) getActivity();
         loginActivity.signInSuccess();
     }
@@ -196,6 +169,8 @@ public class LoginFragment extends Fragment
     @Override
     public void loginFail(@Nullable String errMsg) {
         DialogHelper.dismissProgressDialog();
+        revokeFacebook();
+        revokeGoogle();
 
         if (getView() != null) {
             errMsg = Strings.isNullOrEmpty(errMsg) ? "Sign in fail" : errMsg;
@@ -209,11 +184,6 @@ public class LoginFragment extends Fragment
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        loginFail(connectionResult.getErrorMessage());
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -224,8 +194,6 @@ public class LoginFragment extends Fragment
         } else if (requestCode == RC_FACEBOOK) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
-
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -241,16 +209,18 @@ public class LoginFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.login_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.revoke_user:
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        status -> Timber.d(status.getStatusMessage()));
+            case R.id.revoke_google:
+                revokeGoogle();
+                return true;
+            case R.id.revoke_facebook:
+                revokeFacebook();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -2,6 +2,7 @@ package com.cabbage.firetic.ui.gameboard;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -152,7 +153,7 @@ public class GameboardSector extends CardView {
 
         animator.setDuration(333L)
                 .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setListener(new ElevationSetter(new WeakReference<>((View) this)))
+                .setListener(new ElevationSetter(new WeakReference<>(this)))
                 .start();
     }
 
@@ -168,7 +169,8 @@ public class GameboardSector extends CardView {
             View view = wfTargetView.get();
             if (view != null) {
                 if (view.getScaleX() == 1.0) {
-                    view.setElevation(2.0f * defaultElevation);
+                    view.bringToFront();
+                    ViewCompat.setElevation(view, 2.0f * defaultElevation);
                 }
             }
         }
@@ -179,7 +181,7 @@ public class GameboardSector extends CardView {
             View view = wfTargetView.get();
             if (view != null) {
                 if (view.getScaleX() == 1.0) {
-                    view.setElevation(defaultElevation);
+                    ViewCompat.setElevation(view, defaultElevation);
                 }
             }
         }

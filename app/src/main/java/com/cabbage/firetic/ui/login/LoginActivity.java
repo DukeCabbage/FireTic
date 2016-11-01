@@ -6,8 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.ViewGroup;
 
 import com.cabbage.firetic.R;
@@ -80,9 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signInSuccess() {
         FirebaseUser user = userAccountManager.getFirebaseUser();
-        boolean loggedIn = userAccountManager.getFirebaseUser() != null;
-
-        if (!loggedIn) return;
+        if (user == null) return;
 
         final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
                 .findViewById(android.R.id.content)).getChildAt(0);
@@ -109,12 +105,5 @@ public class LoginActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         Timber.i("onDestroy");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.login_menu, menu);
-        return true;
     }
 }

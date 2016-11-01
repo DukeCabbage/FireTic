@@ -10,11 +10,13 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import timber.log.Timber;
 
@@ -38,21 +40,17 @@ public class LoginPresenter extends LoginContract.Presenter {
 
         Subscription sub = mUserAccountManager.signInEmailAndPassword(email, password)
                 .compose(RxUtils.applySchedulers())
-                .subscribe(firebaseUser -> {
-                            if (firebaseUser == null) throw new RuntimeException();
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            getMvpView().loginFail(throwable.getLocalizedMessage());
-                        });
-
+                .subscribe(signInSubscriber());
         addNewSubscription(sub);
     }
 
     @Override
     void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mUserAccountManager.signInWithCredential(credential);
+        Subscription sub = mUserAccountManager.signInWithCredential(credential)
+                .compose(RxUtils.applySchedulers())
+                .subscribe(signInSubscriber());
+        addNewSubscription(sub);
 
     }
 
@@ -60,8 +58,32 @@ public class LoginPresenter extends LoginContract.Presenter {
     void firebaseAuthWithFacebook(LoginResult loginResult) {
         AccessToken token = loginResult.getAccessToken();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mUserAccountManager.signInWithCredential(credential);
+        Subscription sub = mUserAccountManager.signInWithCredential(credential)
+                .compose(RxUtils.applySchedulers())
+                .subscribe(signInSubscriber());
+        addNewSubscription(sub);
     }
+
+    private Subscriber<FirebaseUser> signInSubscriber() {
+        return new Subscriber<FirebaseUser>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                getMvpView().loginFail(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onNext(FirebaseUser firebaseUser) {
+                if (firebaseUser == null) throw new RuntimeException();
+            }
+        };
+    }
+
 
     @Override
     public void start() {
@@ -69,8 +91,7 @@ public class LoginPresenter extends LoginContract.Presenter {
         addNewSubscription(Observable.merge(Observable.just(mUserAccountManager.getFirebaseUser()), mUserAccountManager.getAuthStateChangePublisher())
                 .subscribe(firebaseUser -> {
                     if (firebaseUser != null) {
-                        Player player = new Player("123", firebaseUser.getDisplayName());
-                        getMvpView().loginSuccess(player);
+                        getMvpView().loginSuccess(firebaseUser);
                     } else {
                         Timber.i("No current user");
                     }

@@ -9,6 +9,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -46,7 +47,9 @@ public class UserAccountManager {
         return getFirebaseUser() != null;
     }
 
-    public Observable<FirebaseUser> signUpEmailAndPassword(@NonNull final String email, @NonNull final String password) {
+    public Observable<FirebaseUser> signUpEmailAndPassword(@NonNull final String email,
+                                                           @NonNull final String password,
+                                                           @NonNull final String userName) {
 
         return Observable.create(new Observable.OnSubscribe<FirebaseUser>() {
             @Override
@@ -63,7 +66,19 @@ public class UserAccountManager {
                                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, firebaseUser.getUid());
                                 mAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
-                                subscriber.onNext(firebaseUser);
+                                firebaseUser.updateProfile(new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(userName)
+                                        .build())
+                                        .addOnSuccessListener(
+                                                aVoid -> {
+                                                    subscriber.onNext(firebaseUser);
+                                                    subscriber.onCompleted();
+                                                }
+                                        )
+                                        .addOnFailureListener(e -> {
+                                            throw new RuntimeException("Fail to set name");
+                                        });
+
                             }
                         })
                         .addOnFailureListener(e -> {
@@ -72,7 +87,7 @@ public class UserAccountManager {
                         })
                         .addOnCompleteListener(task -> {
                             RxUtils.printIsMainThread("sign up complete");
-                            subscriber.onCompleted();
+//                            subscriber.onCompleted();
                         });
             }
         });
@@ -82,7 +97,7 @@ public class UserAccountManager {
         return Observable.create(new Observable.OnSubscribe<FirebaseUser>() {
             @Override
             public void call(final Subscriber<? super FirebaseUser> subscriber) {
-                RxUtils.printIsMainThread("sign in on subscribe");
+                RxUtils.printIsMainThread("Custom sign in on subscribe");
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnSuccessListener(authResult -> {
                             RxUtils.printIsMainThread("sign in success");
@@ -109,16 +124,32 @@ public class UserAccountManager {
         });
     }
 
-    public void signInWithCredential(AuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnFailureListener(e -> e.printStackTrace())
-                .addOnCompleteListener(task -> {
-                    Timber.d("signInWithCredential:onComplete: %b", task.isSuccessful());
+    public Observable<FirebaseUser> signInWithCredential(@NonNull final AuthCredential credential) {
+        return Observable.create(subscriber -> {
+            RxUtils.printIsMainThread("Sign in with credential on subscribe");
+            mAuth.signInWithCredential(credential)
+                    .addOnSuccessListener(authResult -> {
+                        RxUtils.printIsMainThread("sign in success");
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        if (firebaseUser == null) {
+                            subscriber.onError(new RuntimeException("No result"));
+                        } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, firebaseUser.getUid());
+                            mAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
 
-                    // If sign in fails, display a message to the user. If sign in succeeds
-                    // the auth state listener will be notified and logic to handle the
-                    // signed in user can be handled in the listener.
-                });
+                            subscriber.onNext(firebaseUser);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        RxUtils.printIsMainThread("sign in fail");
+                        subscriber.onError(e);
+                    })
+                    .addOnCompleteListener(task -> {
+                        RxUtils.printIsMainThread("sign in complete");
+                        subscriber.onCompleted();
+                    });
+        });
     }
 
     public void signOut() {
